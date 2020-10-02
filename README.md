@@ -3,19 +3,25 @@
     输入：控制指令，红外传感器信息 
     输出：行动状态指令
 ```cpp
-
+    int code_fl[];
+    int code_fr[];
+    int code_bl[];
+    int code_br[];
+    // f&b指front&back，l&r指left&right，code_fl指传给左前轮编码器的代码
+    void drive(int code_fl[], int code_fr[], int code_bl[], int code_br[]
+               ) {}
 ```
 ## 模块二 控制：
     输入：环境讯息（感知，循迹，碰撞） 
     输出：行动状态指令
 ```cpp
-    
+    int[] control(int[] lightMSG, )
 ```
 ## 模块三 感知：
     输入：摄像头信息（从硬件接口得到）
     输出：画面是否有灯光（bool）， 颜色（bool）
 ```cpp 
-    int[] isTouched(double[][] picture) { return lightMSG; }
+    int[] getLightInSight(double[][] picture) { return lightMSG; }
     // lightMSG[0] 存储该帧图像中是否存在灯光
     // lightMSG[1] 存储该帧图像中的灯光信息，若灯为绿lightMSG[1] = 1，若灯为红lightMSG[1] = 0
 ```
