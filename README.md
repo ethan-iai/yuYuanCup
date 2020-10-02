@@ -11,7 +11,9 @@
     
     // drive()函数直接写四个编码数组来实现对小车的控制
     // state = 2 时小车前进， state = 1时小车后退，state = 0 小车静止，state = -1小车旋转 
-    int drive() { return state; }
+    // command为控制模块输出的指令
+    // 小车前后左右有四个红外线传感器，若感应到线sensor = 1, 反之sensor = 0
+    int drive(const int command[], int sensor_f, int sensor_l, int sensor_r, int sensor_b) { return state; }
 ```
 ## 模块二 控制：
     输入：环境讯息（感知，循迹，碰撞） 
