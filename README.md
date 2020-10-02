@@ -11,3 +11,7 @@
 ## 模块四 碰撞：
     输入：碰撞信息（从硬件接口中得到）
     输出：有无碰撞
+
+## 附录：
+    规则网页：https://mp.weixin.qq.com/s/D6dDW7oGuLzhpgyk5TNQ_A
+    
