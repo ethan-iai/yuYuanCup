@@ -16,4 +16,4 @@
 可动性：自带2个连接舵机的I/O<br>
 电路图：https://dl.singtown.com/schematic/base-32-bit.pdf<br>
 处理器手册：https://dl.singtown.com/datasheet/STM32H743II.pdf<br>
-基础知识、历程解析：https://book.openmv.cc/ （做前必看，重点图像处理、串口通信）
+基础知识、历程解析：https://book.openmv.cc/ （做前必看，重点图像处理、串口通信）<br>
