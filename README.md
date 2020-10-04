@@ -40,4 +40,4 @@
 ## 附录：
     规则网页：https://mp.weixin.qq.com/s/D6dDW7oGuLzhpgyk5TNQ_A
     小车底盘资料：http://www.7gp.cn/archives/195
-    学习资料在word文档中
+    所需学习资料在word文档中
