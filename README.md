@@ -36,7 +36,11 @@ class Drive {
     output: take different action mode
 ```cpp
 	// 从openMV与arduino的通信串口中字符串
-	void decode(char* command_string) { }
+	int mode;
+	double target_distance;
+	int delta_pixel;
+	
+	void read() { }
 	void setup() {
 		init_IO();		
 	}
