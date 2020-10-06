@@ -64,11 +64,9 @@ class Drive {
 
 ## sensing(sonar & camera): 
 	input: ... 
-    	输出：画面是否有灯光（bool）， 颜色（bool）
-```cpp
-    // lightMSG[0] 存储该帧图像中是否存在灯光
-    // lightMSG[1] 存储该帧图像中的灯光信息，若灯为绿lightMSG[1] = 1，若灯为红lightMSG[1] = 0
-    int[] getLightInSight(Type pictureMSG) { return lightMSG; }
+    output：...
+```python
+// sensing 
 ```
 
 
