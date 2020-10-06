@@ -182,7 +182,7 @@ void IO_init()
 	pinMode(DIRA1, OUTPUT);pinMode(DIRA2, OUTPUT);
 	pinMode(PWMB, OUTPUT);
 	pinMode(DIRB1, OUTPUT);pinMode(DIRB2, OUTPUT);
-  pinMode(PWMC, OUTPUT);
+  	pinMode(PWMC, OUTPUT);
 	pinMode(DIRC1, OUTPUT);pinMode(DIRC2, OUTPUT);
 	pinMode(PWMD, OUTPUT);
 	pinMode(DIRD1, OUTPUT);pinMode(DIRD2, OUTPUT);
