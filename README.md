@@ -94,7 +94,7 @@ class Motor {
 ```
 
 ## 4. PID alogorithm
-## PID_external
+### PID_external
 	input: length, delta of pixel blocks
 	output: expected_speed_A, expected_speed_B, expected_speed_C, expected_speed_D
 ```python
@@ -102,7 +102,7 @@ class Motor {
 		# ...
 		return expected_speed
 ```
-## PID_internal
+### PID_internal
 	input: expected_speed, cur_speed
 	output: expected_pwm
 ```cpp
