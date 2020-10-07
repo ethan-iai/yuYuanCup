@@ -44,13 +44,21 @@ class Motor {
 	}
 	
 	void loop() {
+		// 读取并处理串口数据
 		read();
-		
-		cur_speed_A = motorA.getCurSpeed();
-		motorA.run(cur_speed_A, expected_speed_A);
 		
 		// ...
 	}
+	
+	void onTime() {
+		// 定时器响，进入onTime函数
+		motorA.run(motorA.get_cur_speed(), expected_speed_A);
+		motorB.run(motorA.get_cur_speed(), expected_speed_B);
+		motorC.run(motorA.get_cur_speed(), expected_speed_D);
+		motorD.run(motorA.get_cur_speed(), expected_speed_D);
+	}
+	
+	void rising() { }
 ```
 
 ## 3. sensing(sonar & camera): 
