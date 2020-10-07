@@ -1,7 +1,7 @@
 # 驭远杯
-## 1. motor and encoder control：
+## 1. motor and encoder control program：
 	input: double cur_speed, double expected_speed  
-	call : PID
+	call : getPIDInternal()， attachInterrupt()
 	output: directly control the motor
 ```cpp
 class Motor {
@@ -13,68 +13,55 @@ class Motor {
 		int coder2;
 	public:
 		// 根据期望速度与实际速度调用PID产生PWM信号
-		void run(double cur_speed, double expected_speed) { }
+		void run(double cur_speed, double expected_speed) {
+			expected_pwm = PID_internal();
+			// 设置电机引脚高低电平与PWM控制电机运转
+		}
 
 		// 得到当前电机对应速度，通过编码器的输出计算
-		double get_speed() { return cur_speed;}	
+		double getCurSpeed() { return cur_speed; }	
 }
 
-class Drive {
-	private: 
-		Motor motorA;
-		Motor motorB;
-		Motor motorC;
-		Motor motorD;
-	public:
-		void rotate_counter_clockwise() { }
-		void rotate_clockwise() { }
-		void engage_target() { }
-}
 ```
-## 2. control
-    input: mode, target_distance, delta_pixel // 目标距离与像素差
-    output: take different action mode
+## 2. arduino program
+    input:  expected_speed_A, expected_speed_B, expected_speed_C, expected_speed_D// 目标距离与像素差
+    output: ...
 ```cpp
-	// 从openMV与arduino的通信串口中字符串
-	int mode;
-	double target_distance;
-	int delta_pixel;
+	// 从openMV与arduino的通信串口中获得四轮目标速度
 	
-	void read() { }
+	void read() { } // 读取四轮期望速度
+	void initIO() { } // 初始化各串口
+	
 	void setup() {
-		init_IO();		
-	}
+		MsTimer2::set(interval, onTime); //定时器绑定, interval为间隔时间，onTime为定时执行速度控制程序
+  		initIO(); // 串口初始化
+		
+		//中断引脚绑定
+		attachInterrupt(digitalPinToInterrupt(CO1A), coder_1_A, rising);
 
+		//定时器开始
+		MsTimer2::start();
+	}
+	
 	void loop() {
-		decode;
-		switch (mode) {
-			case 0:
-				// 旋转寻找目标
-				break;
-			case 1:
-				// 找到目标，冲刺
-				break;
-			case 2:
-				// 完成碰撞，后退
-				break;
-			case 3:
-				// 劫掠
-				break;
-			default:
-				break;
-		}
+		read();
+		
+		cur_speed_A = motorA.getCurSpeed();
+		motorA.run(cur_speed_A, expected_speed_A);
+		
+		// ...
 	}
 ```
 
-## sensing(sonar & camera): 
+## 3. sensing(sonar & camera): 
 	input: mode
-    output：length, delta of pixel blocks
+    	output：length, delta of pixel blocks
 ```python
 // sensing 
 //从串口中读取mode信息
 
 	length = 0;
-	deviation = 0;
+	delta_pixel = 0;
 	
 	def distanceMeasurement(length):
 		...
@@ -94,7 +81,24 @@ class Drive {
 		//串口中传出json信息
 ```
 
-
+## 4. PID alogorithm
+## PID_external
+	input: length, delta of pixel blocks
+	output: expected_speed_A, expected_speed_B, expected_speed_C, expected_speed_D
+```python
+	def get_pid_external(self, error) 
+		# ...
+		return expected_speed
+```
+## PID_internal
+	input: expected_speed, cur_speed
+	output: expected_pwm
+```cpp
+	int get_pid_internal(double expected_speed, double cur_speed) {
+		// ...
+		return expectedd_pwm;
+	}
+```
 ## 附录：
     规则网页：https://mp.weixin.qq.com/s/D6dDW7oGuLzhpgyk5TNQ_A
     小车底盘资料：http://www.7gp.cn/archives/195
