@@ -30,7 +30,11 @@ class Motor {
 	// 从openMV与arduino的通信串口中获得四轮目标速度
 	
 	void read() { } // 读取四轮期望速度
-	void initIO() { } // 初始化各串口
+	
+	// 初始化各串口
+	void initIO() {
+		Serial.begin(19200);	
+	} 
 	
 	void setup() {
 		MsTimer2::set(interval, onTime); //定时器绑定, interval为间隔时间，onTime为定时执行速度控制程序
