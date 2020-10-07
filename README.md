@@ -69,8 +69,8 @@ class Motor {
 	input: mode
     	output：length, delta of pixel blocks
 ```python
-// sensing 
-//从串口中读取mode信息
+# sensing 
+# 从串口中读取mode信息
 
 	length = 0;
 	delta_pixel = 0;
@@ -83,10 +83,10 @@ class Motor {
 		...
 		delta_pixel = read2
 	
-	//传感器初始化、参数调整
-	...
+	# 传感器初始化、参数调整
+	# ...
 	
-	while(True):
+	while (True):
 		takePhoto
 		distanceMeasurement(length)
 		visualIdentity(delta_pixel)
