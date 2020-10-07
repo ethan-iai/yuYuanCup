@@ -71,7 +71,7 @@ class Drive {
     output：length, deviation of pixel blocks
 ```python
 // sensing 
-//从串口中读取mode；信息
+//从串口中读取mode信息
 
 	length = 0;
 	deviation = 0;
