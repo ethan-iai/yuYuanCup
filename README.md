@@ -68,7 +68,7 @@ class Drive {
 
 ## sensing(sonar & camera): 
 	input: mode
-    output：length, deviation of pixel blocks
+    output：length, delta of pixel blocks
 ```python
 // sensing 
 //从串口中读取mode信息
@@ -80,9 +80,9 @@ class Drive {
 		...
 		length = read1
 	
-	def visualIdentity(deviation):
+	def visualIdentity(delta_pixel):
 		...
-		deviation = read2
+		delta_pixel = read2
 	
 	//传感器初始化、参数调整
 	...
@@ -90,7 +90,7 @@ class Drive {
 	while(True):
 		takePhoto
 		distanceMeasurement(length)
-		visualIdentity(deviation)
+		visualIdentity(delta_pixel)
 		//串口中传出json信息
 ```
 
