@@ -67,10 +67,31 @@ class Drive {
 ```
 
 ## sensing(sonar & camera): 
-	input: ... 
-    output：...
+	input: mode
+    output：length, deviation of pixel blocks
 ```python
 // sensing 
+//从串口中读取mode；信息
+
+	length = 0;
+	deviation = 0;
+	
+	def distanceMeasurement(length):
+		...
+		length = read1
+	
+	def visualIdentity(deviation):
+		...
+		deviation = read2
+	
+	//传感器初始化、参数调整
+	...
+	
+	while(True):
+		takePhoto
+		distanceMeasurement(length)
+		visualIdentity(deviation)
+		//串口中传出json信息
 ```
 
 
