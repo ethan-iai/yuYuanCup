@@ -17,7 +17,7 @@ class Motor {
 
 		// 得到当前电机对应速度，通过编码器的输出计算
 		double get_speed() { return cur_speed;}	
-} 
+}
 
 class Drive {
 	private: 
