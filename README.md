@@ -13,8 +13,9 @@ class Motor {
 		int coder2;
 	public:
 		// 根据期望速度与实际速度调用PID产生PWM信号
-		void run(double cur_speed, double expected_speed) {
-			expected_pwm = PID_internal();
+		void run(double expected_speed) {
+			double cur_speed = getCurSpeed();
+			expected_pwm = get_PID_internal(expected_speed, cur_speed);
 			// 设置电机引脚高低电平与PWM控制电机运转
 		}
 
@@ -56,10 +57,10 @@ class Motor {
 	
 	void onTime() {
 		// 定时器响，进入onTime函数
-		motorA.run(motorA.get_cur_speed(), expected_speed_A);
-		motorB.run(motorA.get_cur_speed(), expected_speed_B);
-		motorC.run(motorA.get_cur_speed(), expected_speed_D);
-		motorD.run(motorA.get_cur_speed(), expected_speed_D);
+		motorA.run(expected_speed_A);
+		motorB.run(expected_speed_B);
+		motorC.run(expected_speed_D);
+		motorD.run(expected_speed_D);
 	}
 	
 	void rising() { }
@@ -76,21 +77,21 @@ class Motor {
 	delta_pixel = 0;
 	
 	def distanceMeasurement(length):
-		...
+		# ...
 		length = read1
 	
 	def visualIdentity(delta_pixel):
-		...
+		# ...
 		delta_pixel = read2
 	
 	# 传感器初始化、参数调整
 	# ...
 	
 	while (True):
-		takePhoto
+		# takePhoto
 		distanceMeasurement(length)
 		visualIdentity(delta_pixel)
-		//串口中传出json信息
+		# 串口中传出json信息
 ```
 
 ## 4. PID alogorithm
