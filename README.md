@@ -109,7 +109,7 @@ class Motor {
 ```cpp
 	int get_pid_internal(double expected_speed, double cur_speed) {
 		// ...
-		return expectedd_pwm;
+		return expected_pwm;
 	}
 ```
 ## 附录：
