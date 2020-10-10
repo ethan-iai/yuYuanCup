@@ -18,15 +18,9 @@ private:
 		int coder_a;
 		int coder_b;
 
-		void motorForward(int pwm) { 
-			do { analogWrite(motor_a, pwm); analogWrite(motor_b, 0); } while (false)
-		} 
-		void motorStop() {
-			do { analogWrite(motor_a, 0); analogWrite(motor_b, 0); } while (false)}
-		}
-		void motorBackward() {
-			do { analogWrite(motor_a, 0); analogWrite(motor_b, pwm); } while (false)}
-		}
+		void motorForward(int pwm) { do { analogWrite(motor_a, pwm); analogWrite(motor_b, 0); } while (false) } 
+		void motorStop(int pwm) { do { analogWrite(motor_a, 0); analogWrite(motor_b, 0); } while (false)} }
+		void motorBackward(int pwm) { do { analogWrite(motor_a, 0); analogWrite(motor_b, pwm); } while (false)} }
 
 public:
 		// 根据期望速度与实际速度调用PID产生PWM信号
