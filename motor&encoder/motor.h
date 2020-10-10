@@ -1,5 +1,6 @@
 #ifdef motor
 #define motor
+#include "arduino.h"
 
 class Motor {
 private:
@@ -18,7 +19,7 @@ private:
 		
 public:
         void run(double expected_speed);
-        double getCurSpeed();	
-}
+        double getCurrentSpeed();	
+};
 
 #endif

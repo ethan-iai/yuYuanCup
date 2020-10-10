@@ -27,7 +27,7 @@ private:
 		void motorBackward() {
 			do { analogWrite(motor_a, 0); analogWrite(motor_b, pwm); } while (false)}
 		}
-		
+
 public:
 		// 根据期望速度与实际速度调用PID产生PWM信号
 		void run(double expected_speed) {
@@ -37,7 +37,7 @@ public:
 		}
 
 		// 得到当前电机对应速度，通过编码器的输出计算
-		double getCurSpeed() { return cur_speed; }	
+		double getCurrentSpeed() { return cur_speed; }	
 }
 
 ```
