@@ -19,9 +19,9 @@ private:
 		int coder_b;
 
 		// pulseCount record the number of pulses during the interval from last_time_us_ to cur_time_us_
-	    // if pulse_count > 0, the motor is running forward 
-	    // else, the motor move backwards
-	    int pulse_count_; 
+	    	// if pulse_count > 0, the motor is running forward 
+	    	// else, the motor move backwards
+	    	int pulse_count_; 
 
 		// intialize cur_time_us_ and last_time_us_ to 0
 		unsigned long cur_time_us_;
