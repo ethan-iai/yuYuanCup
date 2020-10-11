@@ -18,7 +18,14 @@ private:
 		int coder_a;
 		int coder_b;
 
-		int forward_; 
+		// pulseCount record the number of pulses during the interval from last_time_us_ to cur_time_us_
+	    // if pulse_count > 0, the motor is running forward 
+	    // else, the motor move backwards
+	    int pulse_count_; 
+
+		// intialize cur_time_us_ and last_time_us_ to 0
+		unsigned long cur_time_us_;
+		unsigned long last_time_us_;
 
 		void motorForward(int pwm) { }; 
 		void motorStop(int pwm) { }; 
@@ -33,6 +40,10 @@ public:
 			pwm = get_PID_internal(expected_speed, cur_speed);
 			// 设置电机引脚高低电平与PWM控制电机运转
 		}
+
+		void initiate();
+		void run(double expected_speed);
+		void stop();
 
 		// 得到当前电机对应速度，通过编码器的输出计算
 		double getCurrentSpeed() { return cur_speed; }	
