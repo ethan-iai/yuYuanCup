@@ -12,7 +12,7 @@ private:
 
 		// coder_VCC and coder_GND are two coder pins that supply power
 		// the coder_GND pin (coder_GND_) connect the the GND of arduino 
-		int coder_VCC_;
+		int coder_VCC;
 
 		// coder_a and coder_n are two pins that supply the coder output
 		int coder_a;
@@ -21,11 +21,11 @@ private:
 		// pulseCount record the number of pulses during the interval from last_time_us_ to cur_time_us_
 	    // if pulse_count > 0, the motor is running forward 
 	    // else, the motor move backwards
-	    int pulse_count_; 
+	    int pulse_count; 
 
 		// intialize cur_time_us_ and last_time_us_ to 0
-		unsigned long cur_time_us_;
-		unsigned long last_time_us_;
+		unsigned long cur_time_us;
+		unsigned long last_time_us;
 
 		void motorForward(int pwm) { }; 
 		void motorStop(int pwm) { }; 
@@ -67,10 +67,13 @@ public:
 		MsTimer2::set(interval, onTime); //定时器绑定, interval为间隔时间，onTime为定时执行速度控制程序
   		initIO(); // 串口初始化
 		
-		//中断引脚绑定
-		attachInterrupt(digitalPinToInterrupt(CO1A), coder_1_A, rising);
+		// 电机初始化
+		motorA.initiate();
+		motorB.initiate();
+		motorC.initiate();
+		motorD.initiate();
 
-		//定时器开始
+		// 定时器开始
 		MsTimer2::start();
 	}
 	
