@@ -30,7 +30,7 @@ public:
 		// 根据期望速度与实际速度调用PID产生PWM信号
 		void run(double expected_speed) {
 			double cur_speed = getCurSpeed();
-			expected_pwm = get_PID_internal(expected_speed, cur_speed);
+			pwm = get_PID_internal(expected_speed, cur_speed);
 			// 设置电机引脚高低电平与PWM控制电机运转
 		}
 
