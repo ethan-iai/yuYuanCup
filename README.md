@@ -11,16 +11,20 @@ private:
 		int motor_b;
 
 		// coder_VCC and coder_GND are two coder pins that supply power
-		int coder_VCC;
-		int coder_GND;
+		// the coder_GND pin (coder_GND_) connect the the GND of arduino 
+		int coder_VCC_;
 
 		// coder_a and coder_n are two pins that supply the coder output
 		int coder_a;
 		int coder_b;
 
-		void motorForward(int pwm) { do { analogWrite(motor_a, pwm); analogWrite(motor_b, 0); } while (false) } 
-		void motorStop(int pwm) { do { analogWrite(motor_a, 0); analogWrite(motor_b, 0); } while (false)} }
-		void motorBackward(int pwm) { do { analogWrite(motor_a, 0); analogWrite(motor_b, pwm); } while (false)} }
+		int forward_; 
+
+		void motorForward(int pwm) { }; 
+		void motorStop(int pwm) { }; 
+		void motorBackward(int pwm) { }; 
+		void coderA() { };
+		void coderB() { };	
 
 public:
 		// 根据期望速度与实际速度调用PID产生PWM信号
