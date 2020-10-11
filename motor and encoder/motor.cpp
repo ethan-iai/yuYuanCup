@@ -26,7 +26,6 @@ Motor::Motor(int motor_a, int motor_b, int coder_VCC, int coder_a, int coder_b) 
 
 // this function has sorts of problems:
 // the first getCurrentSpeed calculation will not be so accurate for the bad presion of last_time_us_
-// the the fuction pointer has a liitle problem s.t there is a complie error 
 void Motor::initiate() {
     attachInterrupt(coder_a_, Motor::coderA, RISING);
     attachInterrupt(coder_b_, Motor::coderB, RISING);

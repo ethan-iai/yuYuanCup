@@ -1,5 +1,8 @@
 #ifndef MOTOR_H_
 #define MOTOR_H_
+
+// include "myArduino" in experimental environment to replace the arduino lib
+
 #include "myArduino.h"
 
 class Motor {
@@ -33,6 +36,7 @@ private:
 	void motorBackward(int pwm) { do { analogWrite(motor_a_, 0); analogWrite(motor_b_, pwm); } while (false); }; 
 	void coderA() { if (digitalRead(coder_a_)) pulse_count_++; else pulse_count_--; };
 	void coderB() { if (digitalRead(coder_b_)) pulse_count_--; else pulse_count_++; };	
+	
 public:
 	Motor(int motor_a, int motor_b, int coder_VCC, int coder_a, int coder_b);
 	void initiate();

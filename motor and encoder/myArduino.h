@@ -8,7 +8,7 @@
 
 void pinMode(int pin, int mode);
 void analogWrite(int pin, int value);
-void attachInterrupt(int pin, void* function, int mode);
+void attachInterrupt(int pin, void function, int mode);
 
 int digitalRead(int pin);
 
