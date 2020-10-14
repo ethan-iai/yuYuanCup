@@ -92,7 +92,6 @@ public:
 		motorD.run(expected_speed_D);
 	}
 	
-	void rising() { }
 ```
 
 ## 3. sensing(sonar & camera): 
