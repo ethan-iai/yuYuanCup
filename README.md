@@ -1,8 +1,8 @@
 # 驭远杯
 ## 1. motor and encoder control program：
-	input: double cur_speed, double expected_speed  
-	call : getPIDInternal()， attachInterrupt()
-	output: directly control the motor
+	input: double expected_speed  
+	call : getPIDInternal()
+	result: directly control the motor
 ```cpp
 class CoderMotor {
 private:
@@ -59,7 +59,7 @@ public:
 
 ```
 ## 2. arduino program
-    input:  expected_speed_A, expected_speed_B, expected_speed_C, expected_speed_D// 目标距离与像素差
+    input:  expected_speed_A, expected_speed_B, expected_speed_C, expected_speed_D// or 目标距离与像素差
     output: ...
 ```cpp
 	// 从openMV与arduino的通信串口中获得四轮目标速度
@@ -112,7 +112,7 @@ public:
 
 ## 3. sensing(sonar & camera): 
 	input: mode
-    	output：length, delta of pixel blocks
+    output：length, delta of pixel blocks
 ```python
 # sensing 
 # 从串口中读取mode信息
