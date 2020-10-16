@@ -4,49 +4,57 @@
 	call : getPIDInternal()， attachInterrupt()
 	output: directly control the motor
 ```cpp
-class Motor {
+class CoderMotor {
 private:
-		// motor_a and motor_b are two motor pins
-		int motor_a;
-		int motor_b;
+	// motor_a and motor_b are two motor pins
+	int PWM_pin_; // PWM output pin
+	int forward_pin_; // if high, motor runs forward
+	int backward_pin_;
 
-		// coder_VCC and coder_GND are two coder pins that supply power
-		// the coder_GND pin (coder_GND_) connect the the GND of arduino 
-		int coder_VCC;
+	Coder coder_; //  coder of the motor 
 
-		// coder_a and coder_n are two pins that supply the coder output
-		int coder_a;
-		int coder_b;
-
-		// pulseCount record the number of pulses during the interval from last_time_us_ to cur_time_us_
-		// if pulse_count > 0, the motor is running forward 
-		// else, the motor move backwards
-		int pulse_count; 
-
-		// intialize cur_time_us_ and last_time_us_ to 0
-		unsigned long cur_time_us;
-		unsigned long last_time_us;
-
-		void motorForward(int pwm) { }; 
-		void motorStop(int pwm) { }; 
-		void motorBackward(int pwm) { }; 
-		void coderA() { };
-		void coderB() { };	
+	void motorForward(int pwm) { }
+	void motorStop(int pwm) { }
+	void motorBackward(int pwm) { } 
 
 public:
-		// 根据期望速度与实际速度调用PID产生PWM信号
-		void run(double expected_speed) {
-			double cur_speed = getCurSpeed();
-			pwm = get_PID_internal(expected_speed, cur_speed);
-			// 设置电机引脚高低电平与PWM控制电机运转
-		}
+	CoderMotor(int PWM_pin, int forward_pin, int backward_pin_, int coder_VCC_pin, 
+		int coder_a_pin, int coder_b_pin, volatile long* pulse_count_ptr) { }
+	
+	// 根据期望速度与实际速度调用PID产生PWM信号
+	void run(double expected_speed) {
+		// ...
+		pwm = get_PID_internal(expected_speed, cur_speed);
+		// 设置电机引脚高低电平与PWM控制电机运转
+		// ...
+	}
+	void stop() { }
+};
 
-		void initiate();
-		void run(double expected_speed);
-		void stop();
+class Coder {
+private:
+    // coder_VCC and coder_GND are two coder pins that supply power
+	// the coder_GND pin (coder_GND_) connect the the GND of arduino 
+	int VCC_pin_;
+	
+	// positive_pin and negative_pin are two pins that supply the coder output
+	int positive_pin_;
+	int negative_pin_;
 
-		// 得到当前电机对应速度，通过编码器的输出计算
-		double getCurrentSpeed() { return cur_speed; }	
+	// pulseCount record the number of pulses during the interval from last_time_us_ to cur_time_us_
+	// if pulse_count > 0, the motor is running forward 
+	// else, the motor move backwards
+	volatile long *pulse_count_ptr_;
+
+	// intialize time_last_micros_ to 0
+	unsigned long time_last_micros_;
+
+    unsigned long static Coder::getChange(long current, long previous) { }
+
+public:
+    Coder();
+    Coder(int VCC_pin, int positive_pin, int negative_pin, volatile long *pulse_count_ptr);
+    double getCurrentVelocity();
 }
 
 ```
@@ -59,20 +67,36 @@ public:
 	void read() { } // 读取四轮期望速度
 	
 	// 初始化各串口
-	void initIO() {
-		Serial.begin(19200);	
+	void initIO() 
+	{
+		Serial.begin(19200);
+		// for every pin
+			pinMode(pin, mode);	
 	} 
 	
-	void setup() {
+	void onTime() {
+		// 定时器响，进入onTime函数
+		motorA.run(expected_speed_A);
+		motorB.run(expected_speed_B);
+		motorC.run(expected_speed_D);
+		motorD.run(expected_speed_D);
+	}
+	
+		
+	void attachInterrupts()
+	{   
+		// for every coder 
+			// every coder has positive_pin and negative_pin
+			attachInterrupt(positive_pin, ..._..._positive, RISING);
+			attachInterrupt(negative_pin, ..._..._negative, RISING);
+	}
+
+	void setup() 
+	{
 		MsTimer2::set(interval, onTime); //定时器绑定, interval为间隔时间，onTime为定时执行速度控制程序
   		initIO(); // 串口初始化
 		
-		// 电机初始化
-		motorA.initiate();
-		motorB.initiate();
-		motorC.initiate();
-		motorD.initiate();
-
+		
 		// 定时器开始
 		MsTimer2::start();
 	}
@@ -82,14 +106,6 @@ public:
 		read();
 		
 		// ...
-	}
-	
-	void onTime() {
-		// 定时器响，进入onTime函数
-		motorA.run(expected_speed_A);
-		motorB.run(expected_speed_B);
-		motorC.run(expected_speed_D);
-		motorD.run(expected_speed_D);
 	}
 	
 ```
