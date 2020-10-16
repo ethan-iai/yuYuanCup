@@ -24,12 +24,12 @@ void left_back_negative() { negative(..., &left_back_count) };
 void right_back_postive() { positive(... , &right_back_count) };
 void right_back_negative() { negative(..., &right_back_count) };
 
-void positive(int pin, int* count_ptr) {
+void positive(int pin, volatile long *count_ptr) {
     if (digitalRead(pin)) (*count_ptr)++;
     else (*count_ptr)--;
 }
 
-void negative(int pin, int* count_ptr) {
+void negative(int pin, volatile long *count_ptr) {
     if (digitalRead(pin)) (*count_ptr)--;
     else (*count_ptr)++;
 }
@@ -45,9 +45,11 @@ void attachInterrupts()
 void setup()
 {
     
+    attachInterrupts();
+    // ...
 }
 
 void loop()
 {
-    
+    // ...   
 }
