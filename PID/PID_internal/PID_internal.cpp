@@ -1,6 +1,6 @@
 #include "PID.h"
 
-int get_PID_internal(double expected_speed, double cur_speed){
+int get_PID_internal(double expected_speed, double cur_speed) {
     float de; 
 	int pwm_old;
 	int pwm_cur;
