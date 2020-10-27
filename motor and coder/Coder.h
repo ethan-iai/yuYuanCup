@@ -46,6 +46,7 @@ public:
     Coder();
     Coder(int VCC_pin, int positive_pin, int negative_pin, volatile long *pulse_count_ptr);
     double getCurrentVelocity();
-}
+};
 
 #endif
+
