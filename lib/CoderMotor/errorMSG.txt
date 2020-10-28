@@ -1,0 +1,20 @@
+In file included from C:\Users\HUAWEI\Documents\Arduino\demo\demo.ino:1:0:
+C:\Users\HUAWEI\Documents\Arduino\libraries\CoderMotor/Coder.h:35:26: warning: extra qualification 'Coder::' on member 'getChange' [-fpermissive]
+     unsigned long static Coder::getChange(long current, long previous) {
+                          ^~~~~
+In file included from C:\Users\HUAWEI\Documents\Arduino\libraries\CoderMotor\Coder.cpp:7:0:
+C:\Users\HUAWEI\Documents\Arduino\libraries\CoderMotor\Coder.h:35:26: warning: extra qualification 'Coder::' on member 'getChange' [-fpermissive]
+     unsigned long static Coder::getChange(long current, long previous) {
+                          ^~~~~
+C:\Users\HUAWEI\Documents\Arduino\libraries\CoderMotor\Coder.cpp:24:8: error: redefinition of 'double Coder::getCurrentVelocity()'
+ double Coder::getCurrentVelocity() {
+        ^~~~~
+C:\Users\HUAWEI\Documents\Arduino\libraries\CoderMotor\Coder.cpp:20:8: note: 'double Coder::getCurrentVelocity()' previously defined here
+ double Coder::getCurrentVelocity() {
+        ^~~~~
+In file included from C:\Users\HUAWEI\Documents\Arduino\libraries\CoderMotor\CoderMotor.h:10:0,
+                 from C:\Users\HUAWEI\Documents\Arduino\libraries\CoderMotor\CoderMotor.cpp:7:
+C:\Users\HUAWEI\Documents\Arduino\libraries\CoderMotor\Coder.h:35:26: warning: extra qualification 'Coder::' on member 'getChange' [-fpermissive]
+     unsigned long static Coder::getChange(long current, long previous) {
+                          ^~~~~
+exit status 1
