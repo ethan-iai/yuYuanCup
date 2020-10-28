@@ -105,7 +105,7 @@ void setup()
 {
     MsTimer2::set(25, OnTime); //定时器绑定
     initIO();   
-    //attachInterrupts();
+    attachInterrupts();
     MsTimer2::start();//定时器开始
 }
 
@@ -154,21 +154,24 @@ void getList()
 {
   String s = detectString();
   String numStr = "";
-  for(int i = 0; i<s.length(); i++)
+  for (int i = 0; i < s.length(); i++)
   {
-    if(s[i]=='('){
+    if (s[i]=='(') 
+    {
       numStr = "";
     }
-    else if(s[i] == ','){
-     
+    else if (s[i] == ',')
+    {
       openmv_data[0] = numStr.toInt();
       numStr = "";
     }
-    else if(s[i]==')'){
+    else if (s[i] == ')')
+    {
       openmv_data[1] = numStr.toInt();
       numStr = "";
     }
-    else{
+    else
+    {
       numStr += s[i];
     }
   }
