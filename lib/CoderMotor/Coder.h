@@ -1,19 +1,18 @@
 #ifndef CODER_H_
 #define CODER_H_
 
-#define DBG
-#ifdef DBG
-	#include "myArduino.h"
+#if defined(ARDUINO) && ARDUINO >= 100
+	#include "Arduino.h"
 #else
-	#include <Arduino.h>
+	#include "WProgram.h"
 #endif
 
 // look at here ===>
 // need to adjust this macro 
-#define LONG_MAX 4294967295 
+#define LONG_MAX (4294967295) 
 // look at here ==>
 
-#define VELOCITY_SCALE_VALUE 76923
+#define VELOCITY_SCALE_VALUE (76923)
 
 class Coder {
 private:
@@ -33,7 +32,7 @@ private:
 	// intialize time_last_micros_ to 0
 	unsigned long time_last_micros_;
 
-    unsigned long static Coder::getChange(long current, long previous) {
+    unsigned long static getChange(long current, long previous) {
 		// Overflow has occured
 		if (current < previous) {
 			return LONG_MAX - previous + current;

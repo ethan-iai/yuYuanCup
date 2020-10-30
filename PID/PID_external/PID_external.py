@@ -7,11 +7,11 @@ class PID:
         self.Kp = 0.5 #比例增益,与比例度呈倒数关系
         self.Tt = 0.5 #积分时间常数
         self.Td = 0.5 #微分时间常数
-        self.expected_speed_A = 0
-        self.expected_speed_B = 0
-        self.expected_speed_C = 0
-        self.expected_speed_D = 0
-        self.maxspeed = 50
+        self.expected_speed_A = 0.0
+        self.expected_speed_B = 0.0
+        self.expected_speed_C = 0.0
+        self.expected_speed_D = 0.0
+        self.maxspeed = 10.0
 
     def velocity_function(self, dicision_coefficient):
         fun_name = "velocity_function_" + str(dicision_coefficient)
@@ -60,10 +60,10 @@ class PID:
         elif self.integrator > self.inte_max:
             self.integrator = self.inte_max
         expected_pixel += self.Tt * self.integrator
-
+        
         self.speed_culculation(expected_pixel, length)
         #根据expected_pixel和length计算expected_speed
 
-        return int(self.expected_speed_A), int(self.expected_speed_B)
+        return self.expected_speed_A, self.expected_speed_B, self.expected_speed_C, self.expected_speed_D
 
 
