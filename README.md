@@ -88,7 +88,7 @@ public:
 	input: detected delta of pixel
 	output: refined delta of pixel
 
-### PID_internal
+### PID
 ```cpp
 	// the expected speed for four wheels
 	// 0 for left front wheel, 1 for right front wheel
