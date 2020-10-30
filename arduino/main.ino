@@ -41,6 +41,8 @@ int openmv_data[3];//openmv通讯
 #define SONAR_TRIG_PIN
 #define SONAR_ECHO_PIN
 
+#define MIN_LENGTH (5)
+
 volatile long left_front_count = 0;
 volatile long right_front_count = 0;
 volatile long left_back_count = 0;
@@ -124,6 +126,34 @@ void setup()
 void loop()
 {
     read(); 
+}
+
+void loop(){
+  int message = get_message_from_openmv();
+  double distance = sonar.distanceCM();
+
+  if (collision_finished == true && is_heading_to_home == true) return;
+  else if (collision_finished == true && is_heading_to_home == false) 
+  {
+      // set the expected speed so the car will move backward
+      // control car to move backward
+      //连续运行control_car_to_back_off一段时间?
+      // hint: distance?
+  }
+
+  switch(message) {
+      case 1001:
+          // control car to spin
+          break;
+      case 1002:
+          is_heading_to_home = 1;
+          // set the expected speed to control the car to spin
+          // control car to spin();
+          break;
+      default:
+          get_expected_velocity(mesasge, distance);
+          break;
+  }
 }
 
 void OnTime()
