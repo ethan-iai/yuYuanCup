@@ -41,6 +41,6 @@ static int speed_on_wheels[4];
 
 int get_PID_internal(double expected_speed, double cur_speed);
 void get_speed_on_wheels(int decision_coefficient, int direction_coefficient, int distance_coefficient);
-void get_expected_speed(int expected_pixel, double length);
+void get_expected_velocity(int expected_pixel, double length);
 
 #endif

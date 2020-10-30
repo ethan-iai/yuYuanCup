@@ -46,7 +46,7 @@ void get_speed_on_wheels(int decision_coefficient, int direction_coefficient, in
     return ;
 }
 
-void get_expected_speed(int expected_pixel, double length) {
+void get_expected_velocity(int expected_pixel, double length) {
     int distance_coefficient = (length >= DECELERATION_DISTANCE) ? (1) : (length / DECELERATION_DISTANCE);
     int direction_coefficient = 1 - abs(expected_pixel) * corresponding_angle / 45;
     int decision_coefficient = 0;

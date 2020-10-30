@@ -2,6 +2,17 @@
 
 #include "PID.h"
 
+#define DBG
+#ifdef DBG
+	#include "myArduino.h"
+#else
+	#if defined(ARDUINO) && ARDUINO >= 100
+		#include "Arduino.h"
+	#else
+		#include "WProgram.h"
+	#endif
+#endif
+
 CoderMotor::CoderMotor(int PWM_pin, int forward_pin, int backward_pin, int coder_VCC_pin, 
     int coder_positive_pin, int coder_negative_pin, volatile long* pulse_count_ptr) {
     // initialize the motor pins

@@ -1,5 +1,16 @@
 #include "Coder.h"
 
+#define DBG
+#ifdef DBG
+	#include "myArduino.h"
+#else
+	#if defined(ARDUINO) && ARDUINO >= 100
+		#include "Arduino.h"
+	#else
+		#include "WProgram.h"
+	#endif
+#endif
+
 Coder::Coder(int VCC_pin, int positive_pin, int negative_pin, volatile long *pulse_count_ptr) {
     pinMode(VCC_pin, OUTPUT);
     pinMode(positive_pin, INPUT);
