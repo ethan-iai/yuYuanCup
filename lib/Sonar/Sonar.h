@@ -12,8 +12,9 @@ class Sonar {
     /**
      * @param triggerPin  Digital ben til styring af sensoren (output).
      * @param echoPin  Digitalt ben til modtagelse af data fra sensoren (input).
+     * @param vccPin Digital pin to apply votage
      */
-      Sonar(int triggerPin, int echoPin);
+      Sonar(int vccPin, int triggerPin, int echoPin);
 
     /**
      * Måler afstanden

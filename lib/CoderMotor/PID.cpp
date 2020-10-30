@@ -34,7 +34,7 @@ void get_speed_on_wheels(int decision_coefficient, int direction_coefficient, in
             speed_on_wheels[1] = speed_on_wheels[2] = MAX_SPEED * direction_coefficient * distance_coefficient;
             break;
         case 2:
-            speed_on_wheels[1] = spped_on_wheels[2] = MAX_SPEED * distance_coefficient;
+            speed_on_wheels[1] = speed_on_wheels[2] = MAX_SPEED * distance_coefficient;
             speed_on_wheels[0] = speed_on_wheels[3] = MAX_SPEED * direction_coefficient * distance_coefficient;
             break;
         default:

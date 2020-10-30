@@ -18,7 +18,6 @@ class Coder {
 private:
     // coder_VCC and coder_GND are two coder pins that supply power
 	// the coder_GND pin (coder_GND_) connect the the GND of arduino 
-	int VCC_pin_;
 	
 	// positive_pin and negative_pin are two pins that supply the coder output
 	int positive_pin_;

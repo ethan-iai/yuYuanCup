@@ -7,9 +7,10 @@
 #include "Sonar.h"
 
 Sonar::Sonar (
-        int triggerPin, int echoPin) {
+        int vccPin, int triggerPin, int echoPin) {
     this->triggerPin = triggerPin;
     this->echoPin = echoPin;
+    pinMode(vccPin, OUTPUT);
     pinMode(triggerPin, OUTPUT);
     pinMode(echoPin, INPUT);
 }

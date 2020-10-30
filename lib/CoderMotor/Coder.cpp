@@ -6,12 +6,13 @@
 
 #include "Coder.h"
 
+Coder::Coder() { }
+
 Coder::Coder(int VCC_pin, int positive_pin, int negative_pin, volatile long *pulse_count_ptr) {
     pinMode(VCC_pin, OUTPUT);
     pinMode(positive_pin, INPUT);
     pinMode(negative_pin, INPUT);
 
-    VCC_pin_ = VCC_pin;
     positive_pin_ = positive_pin;
     negative_pin_ = negative_pin; 
     pulse_count_ptr_ = pulse_count_ptr;
