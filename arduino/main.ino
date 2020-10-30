@@ -3,70 +3,65 @@
 #include <SoftwareSerial.h>
 #include <MsTimer2.h>  
 
-SoftwareSerial softSerial(10,11); //定义软串口,rx为10号端口,tx为11号端口
 int openmv_data[3];//openmv通讯
 
 //具体引脚待确定
-int PWM_left_front ;
-int foward_left_front;
-int backward_left_front;
-int coder_Vcc_left_front;
-int coder_a_left_front;
-int coder_b_left_front;
+// change all the variables to marco 
+// please
 
-int PWM_right_front;
-int foward_right_front;
-int backward_right_front;
-int coder_Vcc_right_front;
-int coder_a_right_front;
-int coder_b_right_front;
+#define PWM_LEFT_FRONT 
+#define FOWARD_LEFT_FRONT
+#define BACKWARD_LEFT_FRONT
+#define CODER_VCC_LEFT_FRONT
+#define CODER_A_LEFT_FRONT
+#define CODER_B_LEFT_FRONT
 
-int PWM_left_back;
-int foward_left_back;  
-int backward_left_back; 
-int coder_Vcc_left_back;
-int coder_a_left_back;  
-int coder_b_left_back;  
+#define PWM_RIGHT_FRONT
+#define FOWARD_RIGHT_FRONT
+#define BACKWARD_RIGHT_FRONT
+#define CODER_VCC_RIGHT_FRONT
+#define CODER_A_RIGHT_FRONT
+#define CODER_B_RIGHT_FRONT
 
-int PWM_right_back;
-int foward_right_back;
-int backward_right_back;
-int coder_Vcc_right_back; 
-int coder_a_right_back; 
-int coder_b_right_back;
+#define PWM_LEFT_BACK
+#define FOWARD_LEFT_BACK  
+#define BACKWARD_LEFT_BACK 
+#define CODER_VCC_LEFT_BACK
+#define CODER_A_LEFT_BACK  
+#define CODER_B_LEFT_BACK  
+
+#define PWM_RIGHT_BACK
+#define FOWARD_RIGHT_BACK
+#define BACKWARD_RIGHT_BACK
+#define CODER_VCC_RIGHT_BACK 
+#define CODER_A_RIGHT_BACK
+#define CODER_B_RIGHT_BACK
+
+#define SONAR_VCC_PIN
+#define SONAR_TRIG_PIN
+#define SONAR_ECHO_PIN
 
 volatile long left_front_count = 0;
 volatile long right_front_count = 0;
 volatile long left_back_count = 0;
 volatile long right_back_count = 0;
 
-int expected_speed_left_front = 0;
-int expected_speed_right_front = 0;
-int expected_speed_left_back = 0;
-int expected_speed_right_back = 0;
+// have already claim speed_on_wheels[] in PID.h
+// directly call speed_on_wheels[] 
 
-// call the constructor of CoderMotor class
-// CoderMotor(int PWM_pin, int forward_pin, int backward_pin_, int coder_VCC_pin, int coder_a_pin, int coder_b_pin, volatile long* pulse_count_ptr);
-CoderMotor left_front_motor  = CoderMotor(PWM_left_front ,foward_left_front ,backward_left_front ,coder_Vcc_left_front ,coder_a_left_front ,coder_b_left_front , &left_front_count);
-CoderMotor right_front_motor = CoderMotor(PWM_right_front,foward_right_front,backward_right_front,coder_Vcc_right_front,coder_a_right_front,coder_b_right_front, &right_front_count);
-CoderMotor left_back_motor   = CoderMotor(PWM_left_back  ,foward_left_back  ,backward_left_back  ,coder_Vcc_left_back  ,coder_a_left_back  ,coder_b_left_back  , &left_back_count);
-CoderMotor right_back_motor  = CoderMotor(PWM_right_back ,foward_right_back ,backward_right_back ,coder_Vcc_right_back ,coder_a_right_back ,coder_b_right_back , &right_back_count);
+// initiate all the hardWares and communication serial 
 
-// call the positive() and negative() listed below
-// if the positive pin of the left front coder connects to arduino no.10 pin
-// call left_front_positive { postive(10, &left_front_count)};  
-void left_front_postive() { positive(coder_a_left_front , &left_front_count); };
-void left_front_negative() { negative(coder_b_left_front, &left_front_count); };
+// claim the software serial
+SoftwareSerial softSerial(10,11); //定义软串口,rx为10号端口,tx为11号端口
 
-void right_front_postive() { positive(coder_a_right_front , &right_front_count); }; 
-void right_front_negative() { negative(coder_b_right_front, &right_front_count); };
+CoderMotor left_front_motor = CoderMotor(PWM_LEFT_FRONT, FOWARD_LEFT_FRONT ,BACKWARD_LEFT_FRONT ,CODER_VCC_LEFT_FRONT ,CODER_A_LEFT_FRONT ,CODER_B_LEFT_FRONT , &left_front_count);
+CoderMotor right_front_motor = CoderMotor(PWM_RIGHT_FRONT, FOWARD_RIGHT_FRONT, BACKWARD_RIGHT_FRONT, CODER_VCC_RIGHT_FRONT, CODER_A_RIGHT_FRONT, CODER_A_RIGHT_FRONT, &right_front_count);
+CoderMotor left_back_motor = CoderMotor(PWM_LEFT_BACK, FOWARD_LEFT_BACK, BACKWARD_LEFT_BACK, CODER_VCC_LEFT_BACK, CODER_A_LEFT_BACK, CODER_B_LEFT_BACK, &left_back_count);
+CoderMotor right_back_motor = CoderMotor((PWM_RIGHT_BACK ,FOWARD_RIGHT_BACK, BACKWARD_RIGHT_BACK ,CODER_VCC_RIGHT_BACK, CODER_A_RIGHT_BACK, CODER_B_RIGHT_BACK, &right_back_count);
 
-void left_back_postive() { positive(coder_a_left_back , &left_back_count); };
-void left_back_negative() { negative(coder_b_left_back, &left_back_count); };
+Sonar sonar = Sonar(SONAR_VCC_PIN, SONAR_TRIG_PIN, SONAR_ECHO_PIN);
 
-void right_back_postive() { positive(coder_a_right_back , &right_back_count); };
-void right_back_negative() { negative(coder_b_right_back, &right_back_count); };
-
+// call by the interrupts 
 void positive(int pin, volatile long *count_ptr) {
     if (digitalRead(pin)) (*count_ptr)++;
     else (*count_ptr)--;
@@ -77,11 +72,27 @@ void negative(int pin, volatile long *count_ptr) {
     else (*count_ptr)++;
 }
 
+// call the positive() and negative() listed below
+// if the positive pin of the left front coder connects to arduino no.10 pin
+// call left_front_positive { postive(10, &left_front_count)};  
+void left_front_postive() { positive(CODER_A_LEFT_FRONT , &left_front_count); };
+void left_front_negative() { negative(CODER_B_LEFT_FRONT, &left_front_count); };
+
+void right_front_postive() { positive(CODER_A_RIGHT_FRONT , &right_front_count); }; 
+void right_front_negative() { negative(CODER_B_RIGHT_FRONT, &right_front_count); };
+
+void left_back_postive() { positive(CODER_A_LEFT_BACK , &left_back_count); };
+void left_back_negative() { negative(CODER_B_LEFT_BACK, &left_back_count); };
+
+void right_back_postive() { positive(CODER_A_RIGHT_BACK, &right_back_count); };
+void right_back_negative() { negative(CODER_B_RIGHT_BACK, &right_back_count); };
+
 void initIO()
 {   
     Serial.begin(19200);
     softSerial.begin(19200); //初始化虚拟串口
     // initiate the IO pins
+
 }
 
 void attachInterrupts()//??不明白要干什么
@@ -117,10 +128,10 @@ void loop()
 
 void OnTime()
 {   // 定时器响，进入onTime函数
-    left_front_motor.run(expected_speed_left_front);
-    right_front_motor.run(expected_speed_right_front);
-    left_back_motor.run(expected_speed_left_back);
-    right_back_motor.run(expected_speed_right_back);
+    left_front_motor.run(speed_on_wheels[0]);
+    right_front_motor.run(speed_on_wheels[1]);
+    left_back_motor.run(speed_on_wheels[2]);
+    right_back_motor.run(speed_on_wheels[3]);
 }
 
 void read()
@@ -128,13 +139,14 @@ void read()
   if(softSerial.available())
   {
     getList();
-    expected_speed_left_front = openmv_data[0];
-    expected_speed_right_front = openmv_data[1];
-    expected_speed_left_back = openmv_data[1];
-    expected_speed_right_back = openmv_data[0];
-      Serial.print(openmv_data[0]);
-      Serial.print('\t');
-      Serial.println(openmv_data[1]);
+    speed_on_wheels[0] = openmv_data[0];
+    speed_on_wheels[1] = openmv_data[1];
+    speed_on_wheels[2] = openmv_data[1];
+    speed_on_wheels[3] = openmv_data[0];
+      
+    // Serial.print(openmv_data[0]);
+    // Serial.print('\t');
+    // Serial.println(openmv_data[1]);
 
     clearList();
   }
