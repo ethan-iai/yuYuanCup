@@ -1,6 +1,0 @@
-CoderMotor  KEYWORD1
-run KEYWORD2
-stop KEYWORD2
-
-Coder KEYWORD1
-getCurrentVelocity KEYWORD2
