@@ -126,6 +126,34 @@ void loop()
     read(); 
 }
 
+void loop(){
+  int message = get_message_from_openmv();
+  double distance = sonar.distanceCM();
+
+  if (collision_finished == true && is_heading_to_home == true) return;
+  else if (collision_finished == true && is_heading_to_home == false) 
+  {
+      // set the expected speed so the car will move backward
+      // control car to move backward
+      //连续运行control_car_to_back_off一段时间?
+      // hint: distance?
+  }
+
+  switch(message) {
+      case 1001:
+          // control car to spin
+          break;
+      case 1002:
+          is_heading_to_home = 1;
+          // set the expected speed to control the car to spin
+          // control car to spin();
+          break;
+      default:
+          get_expected_velocity(mesasge, distance);
+          break;
+  }
+}
+
 void OnTime()
 {   // 定时器响，进入onTime函数
     left_front_motor.run(speed_on_wheels[0]);
