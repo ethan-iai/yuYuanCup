@@ -8,7 +8,7 @@
 #endif
 
 #include "Coder.h"
-#include "PID.h"
+#include "PIDController.h"
 
 class CoderMotor {
 private:
@@ -18,6 +18,7 @@ private:
 	int backward_pin_;
 
 	Coder coder_; //  coder of the motor 
+	PIDController PIDController_;
 
 	void motorForward(int pwm) { do { digitalWrite(forward_pin_, HIGH); digitalWrite(backward_pin_, LOW); analogWrite(PWM_pin_, pwm);} while (false); }; 
 	void motorStop(int pwm) { do { digitalWrite(forward_pin_, LOW); digitalWrite(backward_pin_, LOW); analogWrite(PWM_pin_, pwm);} while (false); }; 

@@ -21,10 +21,10 @@ Coder::Coder(int VCC_pin, int positive_pin, int negative_pin, volatile long *pul
 double Coder::getCurrentVelocity() {
 	// Time elapsed after computing the velocity previously.
 	// change in time is defined as previous - current to prevent round off error.
-	unsigned long delta_time_micros = getChange(micros(), time_last_micros_); // in microseconds
+	unsigned long delta_time_millis = getChange(millis(), time_last_millis_); // in microseconds
 
-    double current_velocity = VELOCITY_SCALE_VALUE * (double)(*pulse_count_ptr_) / delta_time_micros;
+    double current_velocity = VELOCITY_SCALE_VALUE * (double)(*pulse_count_ptr_) / delta_time_millis;
 
     *pulse_count_ptr_ = 0;
-	time_last_micros_ = micros();
+	time_last_millis_ = millis();
 }

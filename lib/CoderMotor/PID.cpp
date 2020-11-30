@@ -6,28 +6,9 @@
 
 #include "PID.h"
 
-int get_PID_internal(double expected_speed, double cur_speed) {
-	pwm_old = (cur_speed - MIN_SPEED) / (MAX_SPEED - MIN_SPEED) * (MAX_PWM - MIN_PWM) + MIN_PWM;
+int speed_on_wheels[4];
 
-	for(int i = 0; i < 3; i++) {
-		error[i] = error[i + 1];
-	}
-	error[3] = expected_speed - cur_speed;	
-
-	de = kp_motor * (error[3] - error[2]) + ki_motor * error[3] - kd_motor * (error[3] - 2 * error[2] + error[1]);
-	pwm_cur = pwm_old + de;
-  	if (pwm_cur > MAX_PWM) {
-		pwm_cur = MAX_PWM;
-	} else if (pwm_cur < MIN_PWM) {
-		pwm_cur = MIN_PWM;
-	}
-	
-  	cur_speed = expected_speed;
-  	pwm_old = pwm_cur; 
-  	return pwm_cur; //输出PWM波
-}
-
-void get_speed_on_wheels(int decision_coefficient, int direction_coefficient, int distance_coefficient) {
+void set_speed_on_wheels(int decision_coefficient, float direction_coefficient, float distance_coefficient) {
     switch (decision_coefficient) {
         case 1:
             speed_on_wheels[0] = speed_on_wheels[3] = MAX_SPEED * distance_coefficient;
@@ -46,9 +27,19 @@ void get_speed_on_wheels(int decision_coefficient, int direction_coefficient, in
     return ;
 }
 
-void get_expected_velocity(int expected_pixel, double distance) {
-    int distance_coefficient = (distance >= DECELERATION_DISTANCE) ? (1) : (distance / DECELERATION_DISTANCE);
-    int direction_coefficient = 1 - abs(expected_pixel) * corresponding_angle / 45;
+void set_forward_velocity(int expected_pixel, double distance) {
+    float distance_coefficient = 0;
+    if (distance > DECELERATION_DISTANCE) {
+        distance_coefficient = 1; 
+    } else if (distance < MIN_DISTANCE) {
+        distance_coefficient = 0;
+    } else {
+        distance_coefficient = (float)distance / DECELERATION_DISTANCE;
+    }
+    
+    float direction_coefficient = 1 - abs(expected_pixel) * corresponding_angle / 45;
+    // --> jie zhi
+    
     int decision_coefficient = 0;
     
     if (expected_pixel > MIN_PIXEL) {
@@ -59,6 +50,29 @@ void get_expected_velocity(int expected_pixel, double distance) {
         decision_coefficient = 2; 
     }
             
-    get_speed_on_wheels(decision_coefficient, direction_coefficient, distance_coefficient);
+    set_speed_on_wheels(decision_coefficient, direction_coefficient, distance_coefficient);
+    return ;
+}
+
+void set_backward_velocity() {
+    for (int i = 0; i < 4; i++) {
+        speed_on_wheels[i] = -MAX_SPEED;
+    }
+    return ;
+}
+
+void set_spin_velocity() {
+    // hint:
+    // modiofy the velocity according to corresponding_angle?
+    
+    speed_on_wheels[0] = speed_on_wheels[3] = -MID_SPEED;
+    speed_on_wheels[1] = speed_on_wheels[2] = MID_SPEED;
+    return;
+}
+
+void set_stop_velocity() {
+    for (int i = 0; i < 4; i++) {
+        speed_on_wheels[i] = 0;
+    }
     return ;
 }

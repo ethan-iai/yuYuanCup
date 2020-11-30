@@ -7,12 +7,14 @@
 	#include "WProgram.h"
 #endif
 
+#define LONG_MAX (4294967295) 
+
 // look at here ===>
 // need to adjust this macro 
-#define LONG_MAX (4294967295) 
+// -----------------------------------------------
+#define VELOCITY_SCALE_VALUE (20)
+// -----------------------------------------------
 // look at here ==>
-
-#define VELOCITY_SCALE_VALUE (76923)
 
 class Coder {
 private:
@@ -29,7 +31,7 @@ private:
 	volatile long *pulse_count_ptr_;
 
 	// intialize time_last_micros_ to 0
-	unsigned long time_last_micros_;
+	unsigned long time_last_millis_ = 0;
 
     unsigned long static getChange(long current, long previous) {
 		// Overflow has occured
