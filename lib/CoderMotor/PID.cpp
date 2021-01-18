@@ -76,3 +76,18 @@ void set_stop_velocity() {
     }
     return ;
 }
+
+// TODO:  
+void set_pan_right_velocity() {
+    // set the velocity to let the car move pan right   
+}
+
+void set_pan_left_velocity() {
+
+}
+
+void set_collecting_velocity(int angle) {
+
+}
+
+
