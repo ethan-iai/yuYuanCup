@@ -9,7 +9,8 @@
   #define BACK_TIME_MILLIS (360000)
 #endif
 
-#define SPAWN_PERIOD (2500)
+#define MOVE_PAN_LEFT_PERIOD (2500)
+#define MOVE_PAN_RIGHT_PERIOD (2500)
 #define BACKWARD_PERIOD1 (1200)
 #define BACKWARD_PERIOD2 (700) 
 
@@ -17,6 +18,8 @@
 #define FORWARD (1)
 #define BACKWARD (2)
 #define SPIN (3)
+#define COLLECTING (4)
+#define RESET (5)
 
 #define OUT_OF_SIGHT (180)
 

@@ -15,8 +15,6 @@ volatile long right_front_count = 0;
 volatile long left_back_count = 0;
 volatile long right_back_count = 0;
 
-// initiate all the hardWares and communication serial
-
 // claim the coders and the motors
 CoderMotor left_front_motor = CoderMotor(PWM_LEFT_FRONT, FORWARD_LEFT_FRONT , BACKWARD_LEFT_FRONT , CODER_VCC_LEFT_FRONT , CODER_A_LEFT_FRONT , CODER_B_LEFT_FRONT , &left_front_count);
 CoderMotor right_front_motor = CoderMotor(PWM_RIGHT_FRONT, FORWARD_RIGHT_FRONT, BACKWARD_RIGHT_FRONT, CODER_VCC_RIGHT_FRONT, CODER_A_RIGHT_FRONT, CODER_B_RIGHT_FRONT, &right_front_count);
@@ -33,7 +31,7 @@ Timer<5, millis> timer;
 void positive(int negative_pin, volatile long* count_ptr) {
 	if (digitalRead(negative_pin)) (*count_ptr)++;
 	else (*count_ptr)--;
-	}
+}
 
 void negative(int positive_pin, volatile long* count_ptr) {
 	if (digitalRead(positive_pin)) (*count_ptr)--;
@@ -60,7 +58,7 @@ void initIO() {
 	digitalWrite(CODER_VCC_LEFT_BACK, HIGH);
 	digitalWrite(CODER_VCC_RIGHT_BACK, HIGH);
 
-	// claim the delta_pixel input pin
+	// claim the messgae transmission pin
 	pinMode(ANALOG_READ_PIN, INPUT);
 	pinMode(BACK_PIN, OUTPUT);
 }
@@ -80,8 +78,7 @@ void attachInterrupts() {
 	attachInterrupt(CODER_B_RIGHT_BACK, right_back_negative, RISING);
 }
 
-unsigned long startTime = 0;
-
+unsigned long start_time = 0;
 void setup() {
 	initIO();
 	attachInterrupts(); 
@@ -90,15 +87,13 @@ void setup() {
 	timer.every(INTERVAL_MILLIS, onTime);
 
   	// set the timer that switch the backward_period
- 	timer.in(BACK_TIME_MILLIS / 2, changeBackwardPeriod);
+ 	timer.in(BACK_TIME_MILLIS / 2, switchStage);
   
   	// set the timer that drives the car home in BACK_TIME_MILLIS
 	timer.in(BACK_TIME_MILLIS, backHome);
 	
 	// set the timer to measure the distance of front obstacle
 	timer.every(INTERVAL_MILLIS, getDistance)
-
-  	startTime = millis();
 }
 
 // read the delta_pixel from openMV 
@@ -107,61 +102,115 @@ int read() { return analogRead(ANALOG_READ_PIN) / 2 - 196; }
 
 // initiate the state as SPAWN, is_heading_home as false
 int state = SPAWN;
-bool is_heading_home = false;
+bool ordered = true;
+// when half time is up, the stage switched to unordered 
+bool half_time_up = false;
+
+// the initial stage is ordered
+// after 3 min, it switchs to unordered  
 volatile double distance = 0.0;
 
+// message expresses the angel in ordered stage
+// messgae expresses the delta pixel in unordered stage
 int message = 0;
-int backward_period = BACKWARD_PERIOD1;
 
 void loop() {
 	timer.tick();
 
-	// if (is_heading_home == true && sonar.distanceCM() <= MIN_DISTANCE) return ;
+	if (ordered) {
+		orderedHander();
+	} else {
+		unorderedHander();
+	}
+}
 
+void orderedHander() {
+	switch (state) { 
+	  case SPAWN: {
+		if (millis() - start_time > MOVE_PAN_RIGHT_PERIOD) { state = COLLECTING; } 
+		break;
+	  }
+	  case COLLECTING: {
+		if (half_time_up) { 
+			state = RESET; 
+			start_time = millis();
+		}  
+		break;
+	  }
+	  case RESET: {
+		// move pan left to the centre of court
+		// then start spining and start the unordered stage 
+		// when the reset action is finished 
+		// formally enter the unordered stage 
+		if (millis() - start_time > MOVE_PAN_LEFT_PERIOD) {
+			ordered = true; 
+			state = SPIN; 
+		}
+	  	break;
+	  }
+	  default: {
+		  assert(false);
+	  }
+	}
+}
+
+void unorderedHander() {
 	switch (state) {
-		case FORWARD:
-			message = read();
-			if (message > OUT_OF_SIGHT || message < -OUT_OF_SIGHT) {
-				// if lights off
-				state = BACKWARD;
-				startTime = millis();
-			}
-			break;
-		case BACKWARD:
-			if (millis() - startTime > backward_period || distance > MAX_BACKWARD_DISTANCE) { 
-				// being backward for backward_period or moving farther than MAX_BACKWARD_DISTANCE
-				// switch state to SPIN
-				state = SPIN; 	
-			}
-			break;
-		case SPIN:                                                                                                               
-			message = read(); // message is either OUT_OF_SIGHT or the delta pixel
-			if (message < FORWARD_PIXEL && message > -FORWARD_PIXEL) state = FORWARD;
-			break;
-    	case SPAWN:
-			if (millis() - startTime > SPAWN_PERIOD) { state = SPIN; } 
-			break;
-		default: 
-			// case STOP:
-			message = read(); // message is either OUT_OF_SIGHT or the delta pixel
-			if (message < FORWARD_PIXEL && message > -FORWARD_PIXEL) state = FORWARD;
-			else state = SPIN;
-			break;
+	  case FORWARD: {
+		message = read();
+		if (message > OUT_OF_SIGHT || message < -OUT_OF_SIGHT) {
+			// if lights off
+			state = BACKWARD;
+			start_time = millis();
+		}
+		break;
+	  }
+	  case BACKWARD: {
+		/* TODO: test the whether the distance measurement if corret
+			if so, swith the order of 2 judgements in line 144
+		*/		 
+		if (millis() - start_time > BACKWARD_PERIOD2 || distance > MAX_BACKWARD_DISTANCE) { 
+			// being backward for backward_period or moving farther than MAX_BACKWARD_DISTANCE
+			// switch state to SPIN
+			state = SPIN; 	
+		}
+		break;
+	  }
+	  case SPIN: {                                                                                                               
+		message = read(); // message is either OUT_OF_SIGHT or the delta pixel
+		if (message < FORWARD_PIXEL && message > -FORWARD_PIXEL) { state = FORWARD; }
+		break;
+	  }
+	  default: { 
+		// case STOP:
+		message = read(); // message is either OUT_OF_SIGHT or the delta pixel
+		if (message < FORWARD_PIXEL && message > -FORWARD_PIXEL) {
+			state = FORWARD;
+		} else {
+			state = SPIN;
+		}
+		break;
+	  }
 	}
 }
 
 void setVelocity() {
 	switch (state) {
-		case FORWARD:
-			set_forward_velocity(read(), distance); break;
-		case BACKWARD:
-			set_backward_velocity(); break;
-		case SPIN:
-			set_spin_velocity(); break;
-  		case SPAWN:
-  			set_forward_velocity(0, distance); break;
-		default:
-			set_stop_velocity(); break;
+	  case FORWARD:
+		set_forward_velocity(read(), distance); break;
+	  case BACKWARD:
+		set_backward_velocity(); break;
+	  case SPIN:
+		set_spin_velocity(); break; 
+	  case SPAWN:
+		set_pan_right_velocity(); break;
+	  case COLLECTING:
+	  	set_collecting_velocity(read());
+	  case RESET:
+	    set_pan_left_velocity(); break;
+	  default: {
+		set_stop_velocity(); break;
+	  }
 	}
 }
 
@@ -183,14 +232,15 @@ bool onTime(void* ) {
 
 bool backHome(void* ) {
 //  Serial.println("back home");
-	is_heading_home = true;
 	digitalWrite(BACK_PIN, HIGH);
-	
 	return false;
 }
 
-bool changeBackwardPeriod(void* ) {
-	backward_period = BACKWARD_PERIOD2;
+bool switchStage(void* ) {
+	// the moment when the stage is switched to unordered
+	// assuming the state of car is COLLECTING
+	// switch the state the RESET
+	half_time_up = true;
 	return false;
 } 
 
