@@ -27,47 +27,28 @@ CoderMotor right_back_motor = CoderMotor(PWM_RIGHT_BACK , FORWARD_RIGHT_BACK, BA
 Sonar sonar = Sonar(SONAR_VCC_PIN, SONAR_TRIG_PIN, SONAR_ECHO_PIN);
 
 // claim the timer
-Timer<3, millis> timer;
+Timer<5, millis> timer;
 
 // assitant function for interrupts
 void positive(int negative_pin, volatile long* count_ptr) {
-  if (digitalRead(negative_pin)) (*count_ptr)++;
-  else (*count_ptr)--;
-}
+	if (digitalRead(negative_pin)) (*count_ptr)++;
+	else (*count_ptr)--;
+	}
 
 void negative(int positive_pin, volatile long* count_ptr) {
-  if (digitalRead(positive_pin)) (*count_ptr)--;
-  else (*count_ptr)++;
+	if (digitalRead(positive_pin)) (*count_ptr)--;
+	else (*count_ptr)++;
 }
 
 // the interrupts functions
-void left_front_postive() {
-  positive(CODER_B_LEFT_FRONT , &left_front_count);
-};
-void left_front_negative() {
-  negative(CODER_A_LEFT_FRONT, &left_front_count);
-};
-
-void right_front_postive() {
-  positive(CODER_B_RIGHT_FRONT , &right_front_count);
-};
-void right_front_negative() {
-  negative(CODER_A_RIGHT_FRONT, &right_front_count);
-};
-
-void left_back_postive() {
-  positive(CODER_B_LEFT_BACK , &left_back_count);
-};
-void left_back_negative() {
-  negative(CODER_A_LEFT_BACK, &left_back_count);
-};
-
-void right_back_postive() {
-  positive(CODER_B_RIGHT_BACK, &right_back_count);
-};
-void right_back_negative() {
-  negative(CODER_A_RIGHT_BACK, &right_back_count);
-};
+void left_front_postive() { positive(CODER_B_LEFT_FRONT , &left_front_count); };
+void left_front_negative() { negative(CODER_A_LEFT_FRONT, &left_front_count); };
+void right_front_postive() { positive(CODER_B_RIGHT_FRONT , &right_front_count); };
+void right_front_negative() { negative(CODER_A_RIGHT_FRONT, &right_front_count); };
+void left_back_postive() { positive(CODER_B_LEFT_BACK , &left_back_count); };
+void left_back_negative() { negative(CODER_A_LEFT_BACK, &left_back_count); };
+void right_back_postive() { positive(CODER_B_RIGHT_BACK, &right_back_count); };
+void right_back_negative() { negative(CODER_A_RIGHT_BACK, &right_back_count); };
 
 
 void initIO() {
@@ -113,19 +94,21 @@ void setup() {
   
   	// set the timer that drives the car home in BACK_TIME_MILLIS
 	timer.in(BACK_TIME_MILLIS, backHome);
-  
+	
+	// set the timer to measure the distance of front obstacle
+	timer.every(INTERVAL_MILLIS, getDistance)
+
   	startTime = millis();
 }
 
 // read the delta_pixel from openMV 
-int read() {
-	return analogRead(ANALOG_READ_PIN) / 2 - 196;
-}
+int read() { return analogRead(ANALOG_READ_PIN) / 2 - 196; }
 
 
 // initiate the state as SPAWN, is_heading_home as false
 int state = SPAWN;
 bool is_heading_home = false;
+volatile double distance = 0.0;
 
 int message = 0;
 int backward_period = BACKWARD_PERIOD1;
@@ -145,7 +128,7 @@ void loop() {
 			}
 			break;
 		case BACKWARD:
-			if (millis() - startTime > backward_period || sonar.distanceCM() > MAX_BACKWARD_DISTANCE) { 
+			if (millis() - startTime > backward_period || distance > MAX_BACKWARD_DISTANCE) { 
 				// being backward for backward_period or moving farther than MAX_BACKWARD_DISTANCE
 				// switch state to SPIN
 				state = SPIN; 	
@@ -170,13 +153,13 @@ void loop() {
 void setVelocity() {
 	switch (state) {
 		case FORWARD:
-			set_forward_velocity(read(), sonar.distanceCM()); break;
+			set_forward_velocity(read(), distance); break;
 		case BACKWARD:
 			set_backward_velocity(); break;
 		case SPIN:
 			set_spin_velocity(); break;
   		case SPAWN:
-  			set_forward_velocity(0, sonar.distanceCM()); break;
+  			set_forward_velocity(0, distance); break;
 		default:
 			set_stop_velocity(); break;
 	}
@@ -207,6 +190,11 @@ bool backHome(void* ) {
 }
 
 bool changeBackwardPeriod(void* ) {
-  backward_period = BACKWARD_PERIOD2;
-  return false;
+	backward_period = BACKWARD_PERIOD2;
+	return false;
 } 
+
+bool getDistance(void* ) {
+	distance = sonar.distanceCM();
+	return true;
+}
