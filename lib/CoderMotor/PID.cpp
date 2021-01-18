@@ -10,19 +10,22 @@ int speed_on_wheels[4];
 
 void set_speed_on_wheels(int decision_coefficient, float direction_coefficient, float distance_coefficient) {
     switch (decision_coefficient) {
-        case 1:
-            speed_on_wheels[0] = speed_on_wheels[3] = MAX_SPEED * distance_coefficient;
-            speed_on_wheels[1] = speed_on_wheels[2] = MAX_SPEED * direction_coefficient * distance_coefficient;
-            break;
-        case 2:
-            speed_on_wheels[1] = speed_on_wheels[2] = MAX_SPEED * distance_coefficient;
-            speed_on_wheels[0] = speed_on_wheels[3] = MAX_SPEED * direction_coefficient * distance_coefficient;
-            break;
-        default:
-            for (int i = 0; i < 4; ++i) { 
-                speed_on_wheels[i] = MAX_SPEED * distance_coefficient;
-            }
-            break;
+      case 1: {
+        speed_on_wheels[0] = speed_on_wheels[3] = MAX_SPEED * distance_coefficient;
+        speed_on_wheels[1] = speed_on_wheels[2] = MAX_SPEED * direction_coefficient * distance_coefficient;
+        break;
+      }
+      case 2: {
+        speed_on_wheels[1] = speed_on_wheels[2] = MAX_SPEED * distance_coefficient;
+        speed_on_wheels[0] = speed_on_wheels[3] = MAX_SPEED * direction_coefficient * distance_coefficient;
+        break;
+      }
+      default: {
+        for (int i = 0; i < 4; ++i) { 
+            speed_on_wheels[i] = MAX_SPEED * distance_coefficient;
+        }
+        break;
+      }
     }
     return ;
 }
@@ -38,7 +41,6 @@ void set_forward_velocity(int expected_pixel, double distance) {
     }
     
     float direction_coefficient = 1 - abs(expected_pixel) * corresponding_angle / 45;
-    // --> jie zhi
     
     int decision_coefficient = 0;
     
@@ -89,7 +91,18 @@ void set_pan_right_velocity() {
 
 // TODO: add velocity setter of state COLLECTING
 void set_collecting_velocity(int angle) {
+    // swith polar axis 
+    angle -= 90;
 
+    if (angle > 0) {
+        for (int i = 0; i < 4; i++) {
+            speed_on_wheels[i] = MAX_SPEED; 
+        }
+    } else {
+        for (int i = 0; i < 4; i++) {
+            speed_on_wheels[i] = -MAX_SPEED;
+        }
+    }
 }
 
 

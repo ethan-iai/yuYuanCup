@@ -7,6 +7,8 @@
     #include "WProgram.h"
 #endif
 
+#include <math.h>
+
 // parameters table provided to modify 
 // pwm and speed macros
 // -------------------------------------------------------
@@ -25,6 +27,9 @@
 #define MAX_BACKWARD_DISTANCE (80)
 #define DECELERATION_DISTANCE (10)
 #define MIN_DISTANCE (2.5)
+
+#define MIN_ANGLE (10)
+#define WIDTH (5)
 
 // speed calculation paremeters
 static const float corresponding_angle = 0.55; // checked
