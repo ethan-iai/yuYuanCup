@@ -1,6 +1,6 @@
 from pyb import Pin
 
-class input_from_due:
+class InputFromDue:
 
     def __init__(self, ip_pin):
         self.pin = ip_pin
@@ -9,7 +9,7 @@ class input_from_due:
     def value(self):
         return self.io_input.value()
 
-class control_button:
+class Button:
 
     def __init__(self, power_supply_pin, control_pin):
         self.pin = control_pin

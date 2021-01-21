@@ -1,25 +1,37 @@
-import sensor, image, time, math ,pyb ,ustruct
-from camera_controlling import camera_as_sensor
+import time, math
+from camera_control import CameraAsSensor
 from PID_external import PID
-from DAC_communicating import output_to_due
-from IO_communicating import input_from_due, control_button
+from DAC_communicate import OutputToDue
+from IO_communicate import InputFromDue, Button
+from my_servo import MyServo
 from pyb import RTC, Timer
 
 RED = 1
 GREEN = 2
-pid = PID()
+ORDERED = 1
+UNORDERED = 2
 
-#setting timer:
+mode = ORDERED
+
+# setting PID:
+pid = ()
+
+# setting servos:
+servos = ()
+servos.init()
+
+# setting timer:
 rtc = RTC()
 rtc.datetime((0, 0, 0, 0, 0, 0, 0, 0))
 
-#setting input and output:
-returning_pin = input_from_due('P9')
-output_pin = output_to_due('P6')
+# setting input and output:
+returning_pin = InputFromDue('P9')
+mode_pin = InputFromDue('P5')
+output_pin = OutputToDue('P6')
 
-#setting camera:
-camera = camera_as_sensor(0, RED)
-camera.initialization()
+# setting camera:
+camera = CameraAsSensor(0, RED)   # setting the color to recognize !!!
+camera.init()
 
 clock = time.clock()
 
@@ -27,7 +39,7 @@ while(True):
     clock.tick()
     img = camera.photo_taking()
 
-    #read the value of returning pin
+    # read the value of returning pin:
     value_of_returning = returning_pin.value()
     if value_of_returning == 1 and camera.mode < 3:
         camera.mode += 2
@@ -36,17 +48,41 @@ while(True):
         camera.mode -= 2
         pid.clear()
 
-    print("Mode = ",camera.mode)
+    #camera.mode = 1     # for debugging
+    print("Camera mode = ", camera.mode)
 
-    delta_pixel = camera.recognition(img)
-    if delta_pixel > 0:
-        expected_pixel = pid.get_expected_pixel(delta_pixel)
-        output_pin.write_message(expected_pixel / 2 + 100)
-        print("Expected pixel: ", expected_pixel)
+    # read the value of mode pin:
+    value_of_mode = mode_pin.value()
+    if value_of_mode == 1:
+        mode = UNORDERED
 
-    else:
-        pid.clear()
-        output_pin.write_message(0)
-        print(0)
+    #mode = 1            # for debugging
+    print("Control mode = ", mode)
+
+    center_of_target = camera.recognition(img)
+    delta_pixel = 0
+
+    if mode == UNORDERED:
+        if center_of_target >= 0:
+            delta_pixel = center_of_target - 160
+            expected_pixel = pid.get_expected_pixel(delta_pixel)
+            output_pin.write_message(expected_pixel / 2 + 100)
+            print("Expected pixel: ", expected_pixel)
+        else:
+            pid.clear()
+            output_pin.write_message(0)
+            print(0)
+
+    elif mode == ORDERED:
+        if center_of_target >= 0:
+            delta_pixel = center_of_target - 160
+            servos.rotate_steering_gear(delta_pixel)
+            expected_angle = servos.pan.angle() - 90
+            output_pin.write_message(expected_angle / 2 + 100)
+            print("Expected angle: ", expected_angle)
+        else:
+            servos.scan()
+            output_pin.write_message(0)
+            print(0)
 
     #print(clock.fps())

@@ -1,6 +1,6 @@
 import sensor, image, math
 
-class camera_as_sensor:
+class CameraAsSensor(object):
 
     def __init__(self, mode, color):
         self.mode = mode
@@ -19,13 +19,13 @@ class camera_as_sensor:
             (150, 150, True, False),                        # red_home
             (150, 150, True, False)]                        # green_home 
 
-    def initialization(self):
+    def init(self):
         sensor.reset()
         sensor.set_pixformat(sensor.RGB565)
         sensor.set_framesize(sensor.QVGA)
         sensor.skip_frames(time = 1000)
         #sensor.set_brightness(0)
-        #sensor.set_auto_exposure(False, 1800)          # reduse camera exposure
+        #sensor.set_auto_exposure(False, 1800)          # reduce camera exposure
         sensor.set_auto_gain(False)                     # must be turned off for color tracking
         sensor.set_auto_whitebal(False)                 # must be turned off for color tracking
 
@@ -46,10 +46,10 @@ class camera_as_sensor:
                     center_of_threshold = blob.cx()
 
             if max_of_threshold > 0:
-                return -160 + center_of_threshold
+                return center_of_threshold
 
             elif max_of_threshold == 0:
-                return 0
+                return -1
 
         elif self.mode == 3 or self.mode == 4:         # home_recognition(red/green)
 
@@ -68,7 +68,7 @@ class camera_as_sensor:
             img.draw_keypoints([(blob.cx(), blob.cy(), int(math.degrees(blob.rotation())))], size=20)
 
         if max_of_threshold > 0:
-            return -160 + center_of_threshold
+            return center_of_threshold
 
         elif max_of_threshold == 0:
-            return 0
+            return -1
