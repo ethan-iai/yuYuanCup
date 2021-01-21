@@ -143,7 +143,8 @@ void orderedHander() {
 		// when the reset action is finished 
 		// formally enter the unordered stage 
 		if (millis() - start_time > MOVE_PAN_LEFT_PERIOD) {
-			ordered = true; 
+			ordered = true;
+            digitalWrite(SWITCH_STAGE_PIN, HIGH);
 			state = SPIN; 
 		}
 	  	break;

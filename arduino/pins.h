@@ -33,6 +33,7 @@
 #define SONAR_TRIG_PIN (13)
 #define SONAR_ECHO_PIN (12)
 
+#define SWITCH_STAGE_PIN ()
 #define BACK_PIN (50)
 #define ANALOG_READ_PIN (A0)
 
