@@ -94,6 +94,9 @@ void setup() {
 	
 	// set the timer to measure the distance of front obstacle
 	timer.every(INTERVAL_MILLIS, getDistance)
+
+	// init the start_time 
+	start_time = millis();
 }
 
 // read the delta_pixel from openMV 
@@ -143,7 +146,7 @@ void orderedHander() {
 		// when the reset action is finished 
 		// formally enter the unordered stage 
 		if (millis() - start_time > MOVE_PAN_LEFT_PERIOD) {
-			ordered = true;
+			ordered = false;
             digitalWrite(SWITCH_STAGE_PIN, HIGH);
 			state = SPIN; 
 		}
