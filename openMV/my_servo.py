@@ -10,31 +10,33 @@ class MyServo:
         self.integrator_components = [0, 0, 0]
         self.integrator = 0
         self.inte_max = 150
-        self.Kp = 0.7                               # proportional gain
-        self.Tt = 0.1                               # integral time constant
-        self.Td = 0.1                               # derivativa time constant
-        self.corresponding_angle = 0.5              # per pixel
-        self.spin_direction = -1                    # -1 for left, 1 for right
+        self.Kp = 0.5                               # proportional gain
+        self.Tt = 0.05                              # integral time constant
+        self.Td = 0.05                               # derivativa time constant
+        self.corresponding_angle = 0.2              # per pixel
+        self.maxspeed = 128
 
     def init(self):
         self.last_delta_pixel = 0
         self.integrator_components = [0, 0, 0]
         self.pan.angle(0)
         self.tilt.angle(0)
-        self.spin_direction = -self.spin_direction
 
     def get_integrator_value(self):
         self.integrator = 0
-        for x in self.integrator_components:
-            self.integrator += x
+        for x in range(3):
+            self.integrator += self.integrator_components[x]
+        if self.integrator > self.inte_max:
+            self.integrator = self.inte_max
+        elif self.integrator < -self.inte_max:
+            self.integrator = -self.inte_max
 
-    def scan(self):
-        if self.pan.angle() == 0:
-            self.spin_direction = 1
-        elif self.pan.angle() == 180:
-            self.spin_direction = -1
-        self.pan.speed(self.spin_direction * 100)
-        return self.spin_direction
+    def scan(self, count):
+        if count % 2 == 0:
+            self.pan.speed(self.maxspeed)
+        elif count % 2 == 1:
+            self.pan.speed(-self.maxspeed)
+        return self.pan.speed()
 
     def rotate_steering_gear(self, delta_pixel):
         expected_pixel = 0
@@ -57,11 +59,13 @@ class MyServo:
             self.integrator = self.inte_max
         expected_pixel += self.Tt * self.integrator
 
+        self.last_delta_pixel = delta_pixel
+
         expected_angle = self.pan.angle() + expected_pixel * self.corresponding_angle
-        if expected_angle < 0:
-            expected_angle = 0
-        elif expected_angle > 180:
-            expected_angle = 180
+        if expected_angle < -90:
+            expected_angle = -90
+        elif expected_angle > 90:
+            expected_angle = 90
 
         self.pan.angle(expected_angle)
 

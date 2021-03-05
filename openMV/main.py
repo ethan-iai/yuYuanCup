@@ -6,6 +6,8 @@ from IO_communicate import InputFromDue, Button
 from my_servo import MyServo
 from pyb import RTC, Timer
 
+UPRIGHT = 1
+
 RED = 1
 GREEN = 2
 ORDERED = 1
@@ -14,10 +16,10 @@ UNORDERED = 2
 mode = ORDERED
 
 # setting PID:
-pid = ()
+pid = PID()
 
 # setting servos:
-servos = ()
+servos = MyServo()
 servos.init()
 
 # setting timer:
@@ -25,7 +27,7 @@ rtc = RTC()
 rtc.datetime((0, 0, 0, 0, 0, 0, 0, 0))
 
 # setting input and output:
-returning_pin = InputFromDue('P9')
+returning_pin = InputFromDue('P4')
 mode_pin = InputFromDue('P5')
 output_pin = OutputToDue('P6')
 
@@ -38,6 +40,7 @@ clock = time.clock()
 while(True):
     clock.tick()
     img = camera.photo_taking()
+    count = rtc.datetime()[6]
 
     # read the value of returning pin:
     value_of_returning = returning_pin.value()
@@ -48,23 +51,23 @@ while(True):
         camera.mode -= 2
         pid.clear()
 
-    #camera.mode = 1     # for debugging
-    print("Camera mode = ", camera.mode)
+    camera.mode = 1     # for debugging
+    #print("Camera mode = ", camera.mode)
 
     # read the value of mode pin:
     value_of_mode = mode_pin.value()
     if value_of_mode == 1:
         mode = UNORDERED
 
-    #mode = 1            # for debugging
-    print("Control mode = ", mode)
+    mode = 1            # for debugging
+    #print("Control mode = ", mode)
 
     center_of_target = camera.recognition(img)
     delta_pixel = 0
 
     if mode == UNORDERED:
         if center_of_target >= 0:
-            delta_pixel = center_of_target - 160
+            delta_pixel = (center_of_target - 160) * UPRIGHT
             expected_pixel = pid.get_expected_pixel(delta_pixel)
             output_pin.write_message(expected_pixel / 2 + 100)
             print("Expected pixel: ", expected_pixel)
@@ -75,13 +78,14 @@ while(True):
 
     elif mode == ORDERED:
         if center_of_target >= 0:
-            delta_pixel = center_of_target - 160
+            delta_pixel = (center_of_target - 160) * UPTIGHT
             servos.rotate_steering_gear(delta_pixel)
-            expected_angle = servos.pan.angle() - 90
+            expected_angle = servos.pan.angle()
             output_pin.write_message(expected_angle / 2 + 100)
             print("Expected angle: ", expected_angle)
         else:
-            servos.scan()
+            servos.init()
+            servos.scan(count)
             output_pin.write_message(0)
             print(0)
 
