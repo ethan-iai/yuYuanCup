@@ -11,8 +11,7 @@
 
 #define MOVE_PAN_LEFT_PERIOD (2500)
 #define MOVE_PAN_RIGHT_PERIOD (2500)
-#define BACKWARD_PERIOD1 (1200)
-#define BACKWARD_PERIOD2 (700) 
+#define BACKWARD_PERIOD (700) 
 
 #define SPAWN (0)
 #define FORWARD (1)

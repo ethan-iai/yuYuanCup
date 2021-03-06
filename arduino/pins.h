@@ -34,7 +34,7 @@
 #define SONAR_ECHO_PIN (12)
 
 // TODO: define SWITCH_STAGE_PIN
-#define SWITCH_STAGE_PIN ()
+#define SWITCH_STAGE_PIN (52)
 #define BACK_PIN (50)
 #define ANALOG_READ_PIN (A0)
 

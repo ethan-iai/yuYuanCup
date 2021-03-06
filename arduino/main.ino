@@ -1,4 +1,5 @@
 #include <arduino-timer.h>
+#include <assert.h>
 
 #include <Sonar.h>
 
@@ -93,7 +94,7 @@ void setup() {
 	timer.in(BACK_TIME_MILLIS, backHome);
 	
 	// set the timer to measure the distance of front obstacle
-	timer.every(INTERVAL_MILLIS, getDistance)
+	timer.every(INTERVAL_MILLIS, getDistance);
 
 	// init the start_time 
 	start_time = millis();
@@ -173,7 +174,7 @@ void unorderedHander() {
 		/* TODO: test the whether the distance measurement if corret
 			if so, swith the order of 2 judgements in line 144
 		*/		 
-		if (millis() - start_time > BACKWARD_PERIOD2 || distance > MAX_BACKWARD_DISTANCE) { 
+		if (millis() - start_time > BACKWARD_PERIOD || distance > MAX_BACKWARD_DISTANCE) { 
 			// being backward for backward_period or moving farther than MAX_BACKWARD_DISTANCE
 			// switch state to SPIN
 			state = SPIN; 	
@@ -235,7 +236,6 @@ bool onTime(void* ) {
 }
 
 bool backHome(void* ) {
-//  Serial.println("back home");
 	digitalWrite(BACK_PIN, HIGH);
 	return false;
 }
