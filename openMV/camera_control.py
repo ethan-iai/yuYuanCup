@@ -19,15 +19,17 @@ class CameraAsSensor(object):
             (150, 150, True, False),                        # red_home
             (150, 150, True, False)]                        # green_home 
 
-    def init(self):
+    def init(self, inverse):
         sensor.reset()
         sensor.set_pixformat(sensor.RGB565)
         sensor.set_framesize(sensor.QVGA)
-        sensor.skip_frames(time = 1000)
-        #sensor.set_brightness(0)
-        #sensor.set_auto_exposure(False, 1800)          # reduce camera exposure
+        sensor.skip_frames(time=1000)
+        # sensor.set_brightness(0)
+        # sensor.set_auto_exposure(False, 1800)          # reduce camera exposure
         sensor.set_auto_gain(False)                     # must be turned off for color tracking
         sensor.set_auto_whitebal(False)                 # must be turned off for color tracking
+        if inverse == 1:
+            sensor.set_vflip(True)
 
     def photo_taking(self):
         return sensor.snapshot()
@@ -39,7 +41,7 @@ class CameraAsSensor(object):
             max_of_threshold = 0
             center_of_threshold = 0
 
-            for blob in img.find_blobs([self.thresholds[self.mode-1]], pixels_threshold = 3, area_threshold = 6, merge = True, margin = 20):
+            for blob in img.find_blobs([self.thresholds[self.mode-1]], pixels_threshold=3, area_threshold=6, merge=True, margin=20):
                 img.draw_keypoints([(blob.cx(), blob.cy(), int(math.degrees(blob.rotation())))], size=20)
                 if blob.area() > max_of_threshold:
                     max_of_threshold = blob.area()
@@ -62,7 +64,7 @@ class CameraAsSensor(object):
                 center_of_threshold = blob.cx()
                 number_of_blob = 0
             if blob.elongation() > 0.5:
-                img.draw_edges(blob.min_corners(), color=(255,0,0))
+                img.draw_edges(blob.min_corners(), color=(255, 0, 0))
             img.draw_rectangle(blob.rect())
             img.draw_cross(blob.cx(), blob.cy())
             img.draw_keypoints([(blob.cx(), blob.cy(), int(math.degrees(blob.rotation())))], size=20)
@@ -72,3 +74,6 @@ class CameraAsSensor(object):
 
         elif max_of_threshold == 0:
             return -1
+
+    def find_blue(self, img):
+        pass
