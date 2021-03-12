@@ -101,6 +101,7 @@ void setup() {
 }
 
 // read the delta_pixel from openMV 
+// TODO: test the range of return value: in [-, ]
 int read() { return analogRead(ANALOG_READ_PIN) / 2 - 196; }
 
 

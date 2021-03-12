@@ -22,6 +22,7 @@
 
 // speed calculation macros
 #define MIN_PIXEL (3)
+#define MAX_PIXEL (180)
 #define FORWARD_PIXEL (90)
 
 #define MAX_BACKWARD_DISTANCE (80)

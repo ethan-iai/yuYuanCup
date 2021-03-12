@@ -91,9 +91,12 @@ void set_pan_left_velocity() {
 
 // TODO: add velocity setter of state COLLECTING
 void set_collecting_velocity(int angle) {
-    // swith polar axis 
-    angle -= 90;
-
+    if (angle < -MAX_PIXEL || angle > MAX_PIXEL) { 
+        for (int i = 0; i < 4; i++) {
+            speed_on_wheels[i] = MIN_SPEED;
+        }
+        return ; 
+    }
     if (angle > 0) {
         for (int i = 0; i < 4; i++) {
             speed_on_wheels[i] = MAX_SPEED; 

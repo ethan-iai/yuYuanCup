@@ -13,6 +13,6 @@ class OutputToDue(object):
             number = 150
         elif number < 50:
             number = 50
-        self.dac_output.write(int(number))
+        self.dac_output.write(int(number))  # 50 ~ 150
 
 
