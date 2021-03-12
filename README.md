@@ -39,6 +39,6 @@ public:
 	output: the delta pixel between target and centre of camera
 
 ## Appendix：
-    (小车底盘资料)[http://www.7gp.cn/archives/195]
-    (Mecanum轮及其速度分解计算)[https://zhuanlan.zhihu.com/p/20282234?utm_source=qq&utm_medium=social]
+    [小车底盘资料](http://www.7gp.cn/archives/195)
+    [Mecanum轮及其速度分解计算](https://zhuanlan.zhihu.com/p/20282234?utm_source=qq&utm_medium=social)
     
