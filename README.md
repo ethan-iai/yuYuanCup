@@ -52,6 +52,8 @@ detect the target, and transmit the parameters of target to arduino DUE board.
 
 ## Appendix：
 [比赛规则](https://bhpan.buaa.edu.cn/#/link/7E5CFF6D305448837059D5E1C2D75403)
+
 [小车底盘资料](http://www.7gp.cn/archives/195)
+
 [Mecanum轮及其速度分解计算](https://zhuanlan.zhihu.com/p/20282234?utm_source=qq&utm_medium=social)
     
