@@ -51,7 +51,7 @@ void right_back_negative() { negative(CODER_A_RIGHT_BACK, &right_back_count); };
 
 
 void initIO() {
-//	 Serial.begin(9600);
+	// Serial.begin(9600);
 
 	// apply power to the coders
 	digitalWrite(CODER_VCC_LEFT_FRONT, HIGH);
@@ -63,6 +63,7 @@ void initIO() {
 	pinMode(ANALOG_READ_PIN, INPUT);
 	pinMode(BACK_PIN, OUTPUT);
 }
+
 
 void attachInterrupts() {
 	// attach interrupts function to the pins
@@ -78,6 +79,7 @@ void attachInterrupts() {
 	attachInterrupt(CODER_A_RIGHT_BACK, right_back_postive, RISING);
 	attachInterrupt(CODER_B_RIGHT_BACK, right_back_negative, RISING);
 }
+
 
 unsigned long start_time = 0;
 void setup() {
@@ -119,6 +121,7 @@ volatile double distance = 0.0;
 // messgae expresses the delta pixel in unordered stage
 int message = 0;
 
+
 void loop() {
 	timer.tick();
 
@@ -128,6 +131,7 @@ void loop() {
 		unorderedHander();
 	}
 }
+
 
 void orderedHander() {
 	switch (state) { 
@@ -149,16 +153,16 @@ void orderedHander() {
 		// formally enter the unordered stage 
 		if (millis() - start_time > MOVE_PAN_LEFT_PERIOD) {
 			ordered = false;
-            digitalWrite(SWITCH_STAGE_PIN, HIGH);
 			state = SPIN; 
 		}
 	  	break;
 	  }
 	  default: {
-		  assert(false);
+		  assert(0);
 	  }
 	}
 }
+
 
 void unorderedHander() {
 	switch (state) {
@@ -200,6 +204,7 @@ void unorderedHander() {
 	}
 }
 
+
 void setVelocity() {
 	switch (state) {
 	  case FORWARD:
@@ -211,7 +216,7 @@ void setVelocity() {
 	  case SPAWN:
 		set_pan_right_velocity(); break;
 	  case COLLECTING:
-	  	set_collecting_velocity(read());
+	  	set_collecting_velocity(read()); break;
 	  case RESET:
 	    set_pan_left_velocity(); break;
 	  default: {
@@ -219,6 +224,7 @@ void setVelocity() {
 	  }
 	}
 }
+
 
 bool onTime(void* ) {
 	
@@ -236,10 +242,12 @@ bool onTime(void* ) {
 	return true;
 }
 
+
 bool backHome(void* ) {
 	digitalWrite(BACK_PIN, HIGH);
 	return false;
 }
+
 
 bool switchStage(void* ) {
 	// the moment when the stage is switched to unordered
@@ -248,6 +256,7 @@ bool switchStage(void* ) {
 	half_time_up = true;
 	return false;
 } 
+
 
 bool getDistance(void* ) {
 	distance = sonar.distanceCM();

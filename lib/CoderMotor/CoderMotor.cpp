@@ -26,7 +26,7 @@ CoderMotor::CoderMotor(int PWM_pin, int forward_pin, int backward_pin, int coder
 void CoderMotor::run(double expected_velocity) {
     double current_velocity = coder_.getCurrentVelocity();
     int pwm = PIDController_.get_PID_internal(current_velocity, expected_velocity);
-    if (expected_velocity > 0) {
+    if (expected_velocity >= 0) {
         motorForward(pwm);
     } else {
         motorBackward(pwm);

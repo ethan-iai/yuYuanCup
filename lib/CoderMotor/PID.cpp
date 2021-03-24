@@ -67,8 +67,8 @@ void set_spin_velocity() {
     // hint:
     // modiofy the velocity according to corresponding_angle?
     
-    speed_on_wheels[0] = speed_on_wheels[3] = -MID_SPEED;
-    speed_on_wheels[1] = speed_on_wheels[2] = MID_SPEED;
+    speed_on_wheels[0] = speed_on_wheels[3] = -MAX_SPEED;
+    speed_on_wheels[1] = speed_on_wheels[2] = MAX_SPEED;
     return;
 }
 

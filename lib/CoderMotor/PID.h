@@ -14,10 +14,10 @@
 // -------------------------------------------------------
 #define MAX_PWM (255)
 #define MID_PWM (125)
-#define MIN_PWM (30)
+#define MIN_PWM (20)
 
 #define MAX_SPEED (100)
-#define MID_SPEED (100) //checked
+#define MID_SPEED (40) //checked
 #define MIN_SPEED (0)
 
 // speed calculation macros
