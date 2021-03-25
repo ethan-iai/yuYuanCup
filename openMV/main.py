@@ -19,8 +19,8 @@ COLOR = RED         # the color to recognize (RED or GREEN)
 TITLE_ANGLE = 0     # the angle of the title servo (-90 to 90)
 
 # setting modes during test: (if true the communication between OpenMv and Due will be invalid)
-CAMERA_MODE = ORDERED
-CONTROL_MODE = ORDERED
+CAMERA_MODE = RED
+CONTROL_MODE = UNORDERED
 
 # setting PID:
 pid = PID()
@@ -78,7 +78,7 @@ while(True):
         if center_of_target >= 0:
             delta_pixel = (-center_of_target + 160) * INVERSE
             expected_pixel = pid.get_expected_pixel(delta_pixel)
-            output_pin.write_message(expected_pixel / 2 + 100)
+            output_pin.write_message(expected_pixel / 2 + 75)
             print("Expected pixel: ", expected_pixel)
         else:
             pid.clear()
@@ -90,7 +90,7 @@ while(True):
             delta_pixel = (-center_of_target + 160) * INVERSE
             servos.rotate_steering_gear(delta_pixel)
             expected_angle = servos.pan.angle()
-            output_pin.write_message(expected_angle / 2 + 100)
+            output_pin.write_message(expected_angle / 3 + 75)
             print("Expected angle: ", expected_angle)
         else:
             servos.init(TITLE_ANGLE)

@@ -9,8 +9,8 @@
   #define BACK_TIME_MILLIS (360000)
 #endif
 
-#define MOVE_PAN_LEFT_PERIOD (2500)
-#define MOVE_PAN_RIGHT_PERIOD (2500)
+#define MOVE_PAN_LEFT_PERIOD (800)
+#define MOVE_PAN_RIGHT_PERIOD (800)
 #define BACKWARD_PERIOD (700) 
 
 #define SPAWN (0)
@@ -20,7 +20,7 @@
 #define COLLECTING (4)
 #define RESET (5)
 
-#define OUT_OF_SIGHT (180)
+#define OUT_OF_SIGHT (140)
 
 extern int speed_on_wheels[4];
 

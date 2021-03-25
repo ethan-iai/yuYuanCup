@@ -1,3 +1,4 @@
+
 #include <arduino-timer.h>
 #include <assert.h>
 
@@ -64,7 +65,6 @@ void initIO() {
 	pinMode(BACK_PIN, OUTPUT);
 }
 
-
 void attachInterrupts() {
 	// attach interrupts function to the pins
 	attachInterrupt(CODER_A_LEFT_FRONT, left_front_postive, RISING);
@@ -79,7 +79,6 @@ void attachInterrupts() {
 	attachInterrupt(CODER_A_RIGHT_BACK, right_back_postive, RISING);
 	attachInterrupt(CODER_B_RIGHT_BACK, right_back_negative, RISING);
 }
-
 
 unsigned long start_time = 0;
 void setup() {
@@ -103,8 +102,9 @@ void setup() {
 }
 
 // read the delta_pixel from openMV 
-// TODO: test the range of return value: in [-, ]
-int read() { return analogRead(ANALOG_READ_PIN) / 2 - 196; }
+// test the range of return value: in [-150, 150]
+//int read() { return analogRead(ANALOG_READ_PIN) / 2 - 196; }
+int read() { return analogRead(ANALOG_READ_PIN) / 2 - 146; }
 
 
 // initiate the state as SPAWN, is_heading_home as false
@@ -121,6 +121,12 @@ volatile double distance = 0.0;
 // messgae expresses the delta pixel in unordered stage
 int message = 0;
 
+//void loop() {
+//
+//	message = read();
+//	Serial.println(message);
+//
+//}
 
 void loop() {
 	timer.tick();
@@ -131,7 +137,6 @@ void loop() {
 		unorderedHander();
 	}
 }
-
 
 void orderedHander() {
 	switch (state) { 
@@ -162,7 +167,6 @@ void orderedHander() {
 	  }
 	}
 }
-
 
 void unorderedHander() {
 	switch (state) {
@@ -204,7 +208,6 @@ void unorderedHander() {
 	}
 }
 
-
 void setVelocity() {
 	switch (state) {
 	  case FORWARD:
@@ -225,7 +228,6 @@ void setVelocity() {
 	}
 }
 
-
 bool onTime(void* ) {
 	
 	// onTime is called when time is up
@@ -242,12 +244,10 @@ bool onTime(void* ) {
 	return true;
 }
 
-
 bool backHome(void* ) {
 	digitalWrite(BACK_PIN, HIGH);
 	return false;
 }
-
 
 bool switchStage(void* ) {
 	// the moment when the stage is switched to unordered
@@ -256,7 +256,6 @@ bool switchStage(void* ) {
 	half_time_up = true;
 	return false;
 } 
-
 
 bool getDistance(void* ) {
 	distance = sonar.distanceCM();

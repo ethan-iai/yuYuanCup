@@ -89,7 +89,6 @@ void set_pan_left_velocity() {
     speed_on_wheels[1] = speed_on_wheels[3] = MAX_SPEED;
 }
 
-// TODO: add velocity setter of state COLLECTING
 void set_collecting_velocity(int angle) {
     if (angle < -MAX_PIXEL || angle > MAX_PIXEL) { 
         for (int i = 0; i < 4; i++) {

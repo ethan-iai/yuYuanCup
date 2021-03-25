@@ -22,7 +22,7 @@
 
 // speed calculation macros
 #define MIN_PIXEL (3)
-#define MAX_PIXEL (180)
+#define MAX_PIXEL (140)
 #define FORWARD_PIXEL (90)
 
 #define MAX_BACKWARD_DISTANCE (80)
@@ -33,7 +33,7 @@
 #define WIDTH (5)
 
 // speed calculation paremeters
-static const float corresponding_angle = 0.55; // checked
+static const float corresponding_angle = 0.55; // modified
 
 // PID const parameters
 static const float kp_motor = 33;
