@@ -22,7 +22,7 @@ class MyServo:
         if mode == 1:
             self.pan.angle(0)
         elif mode == 2:
-            self.pan.angle(130)
+            self.pan.angle(180)
         self.tilt.angle(tilt_angle)
 
     def get_pid(self, error, scaler):

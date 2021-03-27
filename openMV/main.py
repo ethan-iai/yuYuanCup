@@ -8,6 +8,8 @@ from pyb import RTC, Timer
 
 RED = 1
 GREEN = 2
+RED_HOME = 3
+GREEN_HOME = 4
 ORDERED = 1
 UNORDERED = 2
 mode = ORDERED
@@ -20,7 +22,7 @@ TITLE_ANGLE = 0     # the angle of the title servo (-90 to 90)
 
 # setting modes during test: (if true the communication between OpenMv and Due will be invalid)
 CAMERA_MODE = RED
-CONTROL_MODE = UNORDERED
+CONTROL_MODE = ORDERED
 
 # setting PID:
 pid = PID()
