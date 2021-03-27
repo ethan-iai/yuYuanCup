@@ -29,8 +29,8 @@
 #define DECELERATION_DISTANCE (10)
 #define MIN_DISTANCE (2.5)
 
-#define MIN_ANGLE (10)
-#define WIDTH (5)
+#define MIN_ANGLE (10) // unused
+#define WIDTH (5) // unused
 
 // speed calculation paremeters
 static const float corresponding_angle = 0.55; // modified

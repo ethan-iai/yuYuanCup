@@ -181,6 +181,7 @@ void unorderedHander() {
 	  }
 	  case BACKWARD: {
 		/* TODO: test the whether the distance measurement if corret
+			TODO: adjust MAx_BACKWARD_DISTANCE
 			if so, swith the order of 2 judgements in line 144
 		*/		 
 		if (millis() - start_time > BACKWARD_PERIOD || distance > MAX_BACKWARD_DISTANCE) { 
