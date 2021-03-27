@@ -96,6 +96,12 @@ void set_collecting_velocity(int angle) {
         }
         return ; 
     }
+    if (angle > -MIN_ANGLE && angle < MIN_ANGLE) {
+        set_pan_right_velocity(); 
+        return ; 
+    }
+
+    // TODO: approaching velocity coresponding with angle 
     if (angle > 0) {
         for (int i = 0; i < 4; i++) {
             speed_on_wheels[i] = MAX_SPEED; 

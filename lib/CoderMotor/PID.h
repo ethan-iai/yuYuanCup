@@ -29,7 +29,8 @@
 #define DECELERATION_DISTANCE (10)
 #define MIN_DISTANCE (2.5)
 
-#define MIN_ANGLE (10) // unused
+#define MAX_ANGLE MAX_PIXEL
+#define MIN_ANGLE (20) 
 #define WIDTH (5) // unused
 
 // speed calculation paremeters
