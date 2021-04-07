@@ -7,6 +7,7 @@
   #define BACK_TIME_MILLIS (60000)
 #else 
   #define BACK_TIME_MILLIS (360000)
+  #define NDEBUG
 #endif
 
 #define MOVE_PAN_LEFT_PERIOD (800)
