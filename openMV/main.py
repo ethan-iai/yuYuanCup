@@ -12,7 +12,7 @@ RED_HOME = 3
 GREEN_HOME = 4
 ORDERED = 1
 UNORDERED = 2
-mode = ORDERED
+mode = UNORDERED    # if use servos to scan in the UNORDERED state, set original mode to be ORDERED
 
 # settings before match or test: (double check before match!)
 INVERSE = True      # is the camera inverse or not
@@ -29,7 +29,7 @@ pid = PID()
 
 # setting servos:
 servos = MyServo(p=0.07, i=0, imax=90)
-servos.init(tilt_angle=TITLE_ANGLE)
+servos.init(mode=mode, tilt_angle=TITLE_ANGLE)
 
 # setting timer:
 rtc = RTC()
@@ -73,8 +73,10 @@ while(True):
     center_of_target = camera.recognition(img)
     delta_pixel = 0
 
+    '''
     if mode != last_mode:
         servos.init(mode=mode, tilt_angle=TITLE_ANGLE)
+    '''
 
     if mode == UNORDERED:
         if center_of_target >= 0:
@@ -90,6 +92,18 @@ while(True):
     elif mode == ORDERED:
         if center_of_target >= 0:
             delta_pixel = (-center_of_target + 160) * INVERSE
+            expected_pixel = pid.get_expected_pixel(delta_pixel)
+            output_pin.write_message(expected_pixel / 2 + 75)
+            print("Expected pixel: ", expected_pixel)
+        else:
+            pid.clear()
+            output_pin.write_message(0)
+            print(0)
+
+    # with servo:
+    '''
+        if center_of_target >= 0:
+            delta_pixel = (-center_of_target + 160) * INVERSE
             servos.rotate_steering_gear(delta_pixel)
             expected_angle = servos.pan.angle()
             output_pin.write_message(expected_angle / 3 + 75)
@@ -99,5 +113,6 @@ while(True):
             servos.scan(count)
             output_pin.write_message(0)
             print(0)
+    '''
 
     #print(clock.fps())

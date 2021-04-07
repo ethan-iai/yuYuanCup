@@ -18,11 +18,10 @@ class MyServo:
         self.corresponding_angle = 0.5            # per pixel
         self.scan_speed = 240
 
+        self._mode_angle_map = { 1 : 0, 2 : 0, }
+
     def init(self, mode=1, tilt_angle=0):
-        if mode == 1:
-            self.pan.angle(0)
-        elif mode == 2:
-            self.pan.angle(180)
+        self.pan.angle(self._mode_angle_map[mode])
         self.tilt.angle(tilt_angle)
 
     def get_pid(self, error, scaler):
