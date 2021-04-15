@@ -1,8 +1,6 @@
 #include "header.h"
 #include "pins.h"
 
-#include <assert.h>
-
 // variables for coders to count pulses
 volatile long left_front_count = 0;
 volatile long right_front_count = 0;
@@ -53,7 +51,8 @@ void initIO() {
 	digitalWrite(CODER_VCC_RIGHT_BACK, HIGH);
 
 	// claim the messgae transmission pin
-	pinMode(ANALOG_READ_PIN, INPUT);
+	pinMode(DELTA_PIX_PIN, INPUT);
+	PinMode(ANGLE_PIN, INPUT);
 	pinMode(BACK_PIN, OUTPUT);
 }
 
@@ -95,9 +94,9 @@ void setup() {
 
 // read the delta_pixel from openMV 
 // test the range of return value: in [-150, 150]
-//int read() { return analogRead(ANALOG_READ_PIN) / 2 - 196; }
-int read() { return analogRead(ANALOG_READ_PIN) / 2 - 146; }
-
+int read_delta_pixel() { return analogRead(DELTA_PIX_PIN) / 2 - 146; }
+// TODO: validate the angle transform function 
+int read_angle() { return (int)((float)analogRead(ANGLE_PIN) / 227 * 360 - 180); }
 
 // initiate the state as SPAWN, is_heading_home as false
 int state = SPAWN;
@@ -142,9 +141,6 @@ void loop() {
 		if (message < FORWARD_PIXEL && message > -FORWARD_PIXEL) { state = FORWARD; }
 		break;
 	  }
-	  case SPAWN:
-	 	if (millis() - start_time > SPAWN_PERIOD) { state = SPIN; } 
-		break;
 	  default: { 
 		// case STOP:
 		message = read(); // message is either OUT_OF_SIGHT or the delta pixel
@@ -156,16 +152,14 @@ void loop() {
 		break;
 	  }
 	}
-	
 }
-
 
 void setVelocity() {
 	switch (state) {
 	  case FORWARD:
-		set_forward_velocity(read(), distance); break;
+		set_forward_velocity(read_delta_pixel(), distance); break;
 	  case BACKWARD:
-		set_backward_velocity(); break;
+		set_backward_velocity(read_angle()); break;
 	  case SPIN:
 		set_spin_velocity(); break; 
 	  case SPAWN:
@@ -175,6 +169,7 @@ void setVelocity() {
 	  }
 	}
 }
+
 
 bool onTime(void* ) {
 	
@@ -197,6 +192,7 @@ bool backHome(void* ) {
 	return false;
 }
 
+
 bool switchStage(void* ) {
 	// the moment when the stage is switched to unordered
 	// assuming the state of car is COLLECTING
@@ -204,6 +200,7 @@ bool switchStage(void* ) {
 	ordered = false;
 	return false;
 } 
+
 
 bool getDistance(void* ) {
 	distance = sonar.distanceCM();

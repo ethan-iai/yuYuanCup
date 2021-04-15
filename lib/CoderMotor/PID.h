@@ -20,18 +20,16 @@
 #define MID_SPEED (40) //checked
 #define MIN_SPEED (0)
 
-// speed calculation macros
+// speed calculation constants
 #define MIN_PIXEL (3)
-#define MAX_PIXEL (140)
-#define FORWARD_PIXEL (90)
 
-#define MAX_BACKWARD_DISTANCE (80)
 #define DECELERATION_DISTANCE (10)
 #define MIN_DISTANCE (2.5)
 
-#define MAX_ANGLE MAX_PIXEL
-#define MIN_ANGLE (20) 
-#define WIDTH (5) // unused
+#define ANGLE_THRESHOLD (25) 
+
+// FIXME: constants derserted
+#define MAX_PIXEL (140)
 
 // speed calculation paremeters
 static const float corresponding_angle = 0.55; // modified

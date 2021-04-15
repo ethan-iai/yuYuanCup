@@ -8,7 +8,8 @@
 
 int speed_on_wheels[4];
 
-void set_speed_on_wheels(int decision_coefficient, float direction_coefficient, float distance_coefficient) {
+void set_speed_on_wheels
+    (int decision_coefficient, float direction_coefficient, float distance_coefficient) {
     switch (decision_coefficient) {
       case 1: {
         speed_on_wheels[0] = speed_on_wheels[3] = MAX_SPEED * distance_coefficient;
@@ -56,10 +57,24 @@ void set_forward_velocity(int expected_pixel, double distance) {
     return ;
 }
 
-void set_backward_velocity() {
-    for (int i = 0; i < 4; i++) {
-        speed_on_wheels[i] = -MAX_SPEED;
+void set_backward_velocity(int angle) {
+    if ((angle > 5 && angle < 30) || 
+        (angle > -175 && angle < -150)) {
+        // move right-backward    
+        speed_on_wheels[0] = speed_on_wheels[2] = -MAX_SPEED;
+        speed_on_wheels[1] = speed_on_wheels[3] = - 0.15 * MAX_SPEED;
+    } else if ((angle > -30 && angle < -5) || 
+               (angle > 150) && angle < 175) {
+        // move left-backward
+        speed_on_wheels[0] = speed_on_wheels[2] = -MAX_SPEED;
+        speed_on_wheels[1] = speed_on_wheels[3] = - 0.15 * MAX_SPEED;    
+    } else {
+        // move backward straight
+        for (int i = 0; i < 4; i++) {
+            speed_on_wheels[i] = -MAX_SPEED;
+        }
     }
+
     return ;
 }
 
@@ -79,16 +94,19 @@ void set_stop_velocity() {
     return ;
 }
 
+// FIXME: function deserted 
 void set_pan_right_velocity() {
     speed_on_wheels[0] = speed_on_wheels[2] = MAX_SPEED;
     speed_on_wheels[1] = speed_on_wheels[3] = -MAX_SPEED;
 }
 
+// FIXME: function deserted
 void set_pan_left_velocity() {
     speed_on_wheels[0] = speed_on_wheels[2] = -MAX_SPEED;
     speed_on_wheels[1] = speed_on_wheels[3] = MAX_SPEED;
 }
 
+// FIXME: function deserted
 void set_collecting_velocity(int angle) {
     if (angle < -MAX_PIXEL || angle > MAX_PIXEL) { 
         for (int i = 0; i < 4; i++) {
@@ -96,12 +114,6 @@ void set_collecting_velocity(int angle) {
         }
         return ; 
     }
-    if (angle > -MIN_ANGLE && angle < MIN_ANGLE) {
-        set_pan_right_velocity(); 
-        return ; 
-    }
-
-    // TODO: approaching velocity coresponding with angle 
     if (angle > 0) {
         for (int i = 0; i < 4; i++) {
             speed_on_wheels[i] = MAX_SPEED; 

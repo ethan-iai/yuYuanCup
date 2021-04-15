@@ -35,6 +35,7 @@
 
 #define SWITCH_STAGE_PIN (52)
 #define BACK_PIN (50)
-#define ANALOG_READ_PIN (A0)
+#define DELTA_PIX_PIN (A0)
+#define ANGLE_PIN ()
 
 #endif
