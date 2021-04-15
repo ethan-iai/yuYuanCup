@@ -110,8 +110,6 @@ int read() { return analogRead(ANALOG_READ_PIN) / 2 - 146; }
 // initiate the state as SPAWN, is_heading_home as false
 int state = SPAWN;
 bool ordered = true;
-// when half time is up, the stage switched to unordered 
-bool half_time_up = false;
 
 // the initial stage is ordered
 // after 3 min, it switchs to unordered  
@@ -121,54 +119,10 @@ volatile double distance = 0.0;
 // messgae expresses the delta pixel in unordered stage
 int message = 0;
 
-//void loop() {
-//
-//	message = read();
-//	Serial.println(message);
-//
-//}
 
 void loop() {
 	timer.tick();
 
-	if (ordered) {
-		orderedHander();
-	} else {
-		unorderedHander();
-	}
-}
-
-void orderedHander() {
-	switch (state) { 
-	  case SPAWN: {
-		if (millis() - start_time > MOVE_PAN_RIGHT_PERIOD) { state = COLLECTING; } 
-		break;
-	  }
-	  case COLLECTING: {
-		if (half_time_up) { 
-			state = RESET; 
-			start_time = millis();
-		}  
-		break;
-	  }
-	  case RESET: {
-		// move pan left to the centre of court
-		// then start spining and start the unordered stage 
-		// when the reset action is finished 
-		// formally enter the unordered stage 
-		if (millis() - start_time > MOVE_PAN_LEFT_PERIOD) {
-			ordered = false;
-			state = SPIN; 
-		}
-	  	break;
-	  }
-	  default: {
-		  assert(0);
-	  }
-	}
-}
-
-void unorderedHander() {
 	switch (state) {
 	  case FORWARD: {
 		message = read();
@@ -196,6 +150,9 @@ void unorderedHander() {
 		if (message < FORWARD_PIXEL && message > -FORWARD_PIXEL) { state = FORWARD; }
 		break;
 	  }
+	  case SPAWN:
+	 	if (millis() - startTime > SPAWN_PERIOD) { state = SPIN; } 
+		break;
 	  default: { 
 		// case STOP:
 		message = read(); // message is either OUT_OF_SIGHT or the delta pixel
@@ -207,6 +164,11 @@ void unorderedHander() {
 		break;
 	  }
 	}
+	
+}
+
+void unorderedHander() {
+
 }
 
 void setVelocity() {
@@ -218,11 +180,7 @@ void setVelocity() {
 	  case SPIN:
 		set_spin_velocity(); break; 
 	  case SPAWN:
-		set_pan_right_velocity(); break;
-	  case COLLECTING:
-	  	set_collecting_velocity(read()); break;
-	  case RESET:
-	    set_pan_left_velocity(); break;
+		set_forward_velocity(0, distance); break;
 	  default: {
 		set_stop_velocity(); break;
 	  }
@@ -235,8 +193,7 @@ bool onTime(void* ) {
 	setVelocity();
 	
 	// 0 for left front wheel, 1 for right front wheel
-	// 2 for right back wheel, 3 for left back wheel
-	
+	// 2 for right back wheel, 3 for left back wheel	
 	left_front_motor.run(speed_on_wheels[0]);
 	right_front_motor.run(speed_on_wheels[1]);
 	right_back_motor.run(speed_on_wheels[2]);
@@ -244,6 +201,7 @@ bool onTime(void* ) {
 	
 	return true;
 }
+
 
 bool backHome(void* ) {
 	digitalWrite(BACK_PIN, HIGH);
@@ -254,7 +212,7 @@ bool switchStage(void* ) {
 	// the moment when the stage is switched to unordered
 	// assuming the state of car is COLLECTING
 	// switch the state the RESET
-	half_time_up = true;
+	ordered = false;
 	return false;
 } 
 
