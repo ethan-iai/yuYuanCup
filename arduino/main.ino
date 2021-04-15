@@ -141,6 +141,9 @@ void loop() {
 		if (message < FORWARD_PIXEL && message > -FORWARD_PIXEL) { state = FORWARD; }
 		break;
 	  }
+	  case SPAWN:
+		if (millis() - start_time > SPAWN_PERIOD) { state = SPIN; } 
+		break;
 	  default: { 
 		// case STOP:
 		message = read(); // message is either OUT_OF_SIGHT or the delta pixel
