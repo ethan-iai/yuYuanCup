@@ -1,6 +1,14 @@
 #ifndef HEADER_H_
 #define HEADER_H_
 
+#include <arduino-timer.h>
+
+#include <Sonar.h>
+
+#include <Coder.h>
+#include <CoderMotor.h>
+#include <PID.h>
+
 #define INTERVAL_MILLIS (25)
 
 #ifdef DBG

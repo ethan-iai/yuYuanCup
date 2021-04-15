@@ -1,15 +1,7 @@
-
-#include <arduino-timer.h>
-#include <assert.h>
-
-#include <Sonar.h>
-
-#include <Coder.h>
-#include <CoderMotor.h>
-#include <PID.h>
-
 #include "header.h"
 #include "pins.h"
+
+#include <assert.h>
 
 // variables for coders to count pulses
 volatile long left_front_count = 0;
@@ -151,7 +143,7 @@ void loop() {
 		break;
 	  }
 	  case SPAWN:
-	 	if (millis() - startTime > SPAWN_PERIOD) { state = SPIN; } 
+	 	if (millis() - start_time > SPAWN_PERIOD) { state = SPIN; } 
 		break;
 	  default: { 
 		// case STOP:
@@ -167,9 +159,6 @@ void loop() {
 	
 }
 
-void unorderedHander() {
-
-}
 
 void setVelocity() {
 	switch (state) {
