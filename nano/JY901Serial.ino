@@ -5,19 +5,29 @@
 #define ANGLE_PIN (3)
 #define MAX_PWM (150) 
 
+int init_angle = 0;
+int pwm = 0;
+int a = 0;
+
 void setup() {
-  int init_angle = JY901.stcAngle.Angle[2];
+  Serial.begin(9600);
+
+  while (Serial.available()) {
+    a = Serial.read();
+    JY901.CopeSerialData(a); //Call JY901 data cope function
+  }
+
+  init_angle = JY901.stcAngle.Angle[2];
   pinMode(ANGLE_PIN, OUTPUT);  
 }
 
-int a = 0;
 void loop() {
  while (Serial.available()) {
     a = Serial.read();
     JY901.CopeSerialData(a); //Call JY901 data cope function
   }
   
-  int pwm = (float)ANGLE(JY901.stcAngle.Angle[2] - init_angle) / 32768 * 75 + 75;
+  pwm = (float) ((JY901.stcAngle.Angle[2] - init_angle) >> 15) * 75 + 75;
   if (pwm > MAX_PWM) { pwm -= MAX_PWM; }
   if (pwm < 0) { pwm += MAX_PWM; } 
 

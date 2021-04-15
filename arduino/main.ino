@@ -96,7 +96,7 @@ void setup() {
 // test the range of return value: in [-150, 150]
 int read_delta_pixel() { return analogRead(DELTA_PIX_PIN) / 2 - 146; }
 // TODO: validate the angle transform function 
-int read_angle() { return (int)((float)analogRead(ANGLE_PIN) / 227 * 360 - 180); }
+int read_angle() { return (int)((float)analogRead(ANGLE_PIN) / 3650.6)  * 360 - 180); }
 
 // initiate the state as SPAWN, is_heading_home as false
 int state = SPAWN;
