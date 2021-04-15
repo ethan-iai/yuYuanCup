@@ -52,7 +52,7 @@ void initIO() {
 
 	// claim the messgae transmission pin
 	pinMode(DELTA_PIX_PIN, INPUT);
-	PinMode(ANGLE_PIN, INPUT);
+	pinMode(ANGLE_PIN, INPUT);
 	pinMode(BACK_PIN, OUTPUT);
 }
 
@@ -92,7 +92,7 @@ void setup() {
 	start_time = millis();
 }
 
-// read the delta_pixel from openMV 
+// read_delta_pixel the delta_pixel from openMV 
 // test the range of return value: in [-150, 150]
 int read_delta_pixel() { return analogRead(DELTA_PIX_PIN) / 2 - 146; }
 // TODO: validate the angle transform function 
@@ -116,7 +116,7 @@ void loop() {
 
 	switch (state) {
 	  case FORWARD: {
-		message = read();
+		message = read_delta_pixel();
 		if (message > OUT_OF_SIGHT || message < -OUT_OF_SIGHT) {
 			// if lights off
 			state = BACKWARD;
@@ -137,7 +137,7 @@ void loop() {
 		break;
 	  }
 	  case SPIN: {                                                                                                               
-		message = read(); // message is either OUT_OF_SIGHT or the delta pixel
+		message = read_delta_pixel(); // message is either OUT_OF_SIGHT or the delta pixel
 		if (message < FORWARD_PIXEL && message > -FORWARD_PIXEL) { state = FORWARD; }
 		break;
 	  }
@@ -146,7 +146,7 @@ void loop() {
 		break;
 	  default: { 
 		// case STOP:
-		message = read(); // message is either OUT_OF_SIGHT or the delta pixel
+		message = read_delta_pixel(); // message is either OUT_OF_SIGHT or the delta pixel
 		if (message < FORWARD_PIXEL && message > -FORWARD_PIXEL) {
 			state = FORWARD;
 		} else {

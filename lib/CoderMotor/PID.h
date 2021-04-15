@@ -54,7 +54,7 @@ void set_speed_on_wheels(int decision_coefficient, int direction_coefficient, in
 void set_forward_velocity(int expected_pixel, double distance);
 void set_spin_velocity();
 void set_stop_velocity();
-void set_backward_velocity();
+void set_backward_velocity(int angle);
 
 // called in ordered stage 
 void set_pan_right_velocity();
