@@ -57,17 +57,14 @@ void set_forward_velocity(int expected_pixel, double distance) {
     return ;
 }
 
-void set_backward_velocity(int angle) {
-    if ((angle > 5 && angle < 30) || 
-        (angle > -175 && angle < -150)) {
-        // move right-backward    
+void set_backward_velocity(int opt) {
+    if (opt == LEFT_BACK)// move right-backward    
         speed_on_wheels[0] = speed_on_wheels[2] = -MAX_SPEED;
-        speed_on_wheels[1] = speed_on_wheels[3] = - 0.15 * MAX_SPEED;
-    } else if ((angle > -30 && angle < -5) || 
-               (angle > 150) && angle < 175) {
+        speed_on_wheels[1] = speed_on_wheels[3] = -0.15 * MAX_SPEED;
+    } else if (opt == RIGHT_BACK) {
         // move left-backward
         speed_on_wheels[0] = speed_on_wheels[2] = -MAX_SPEED;
-        speed_on_wheels[1] = speed_on_wheels[3] = - 0.15 * MAX_SPEED;    
+        speed_on_wheels[1] = speed_on_wheels[3] = -0.15 * MAX_SPEED;    
     } else {
         // move backward straight
         for (int i = 0; i < 4; i++) {

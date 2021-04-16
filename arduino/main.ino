@@ -52,7 +52,9 @@ void initIO() {
 
 	// claim the messgae transmission pin
 	pinMode(DELTA_PIX_PIN, INPUT);
-	pinMode(ANGLE_PIN, INPUT);
+	pinMode(OP1_PIN, INPUT);
+	pinMode(OP2_PIN, INPUT);
+	
 	pinMode(BACK_PIN, OUTPUT);
 }
 
@@ -95,8 +97,11 @@ void setup() {
 // read_delta_pixel the delta_pixel from openMV 
 // test the range of return value: in [-150, 150]
 int read_delta_pixel() { return analogRead(DELTA_PIX_PIN) / 2 - 146; }
-// TODO: validate the angle transform function 
-int read_angle() { return (int)((float)analogRead(ANGLE_PIN) / 3650.6)  * 360 - 180); }
+int solve_opt() { 
+	int op1 = digitalRead(OP1_PIN);
+	int op0 = digitalRead(OP2_PIN);
+	return ((op1 << 1) | op0);
+}
 
 // initiate the state as SPAWN, is_heading_home as false
 int state = SPAWN;
@@ -162,7 +167,7 @@ void setVelocity() {
 	  case FORWARD:
 		set_forward_velocity(read_delta_pixel(), distance); break;
 	  case BACKWARD:
-		set_backward_velocity(read_angle()); break;
+		set_backward_velocity(solve_opt()); break;
 	  case SPIN:
 		set_spin_velocity(); break; 
 	  case SPAWN:
