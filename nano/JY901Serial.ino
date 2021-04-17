@@ -30,23 +30,22 @@ void loop() {
   if (angle > MAX_ANGLE) { angle -= MAX_ANGLE; }
   if (angle < -MAX_ANGLE) { angle += MAX_ANGLE; }                            
 
-  Serial.println(angle);
 
 	if ((angle > 5 && angle < 30) || 
         (angle > -175 && angle < -150)) {
-        // move right-backward - op[1:0] = 01   
-        digitalWrite(RIGHT_PIN, HIGH);
-        digitalWrite(LEFT_PIN, LOW);
-    } else if ((angle > -30 && angle < -5) || 
+    // move right-backward - op[1:0] = 01   
+    digitalWrite(RIGHT_PIN, HIGH);
+    digitalWrite(LEFT_PIN, LOW);
+  } else if ((angle > -30 && angle < -5) || 
                (angle > 150) && angle < 175) {
-        // move left-backward - op[1:0] = 10
-        digitalWrite(LEFT_PIN, HIGH);
-        digitalWrite(RIGHT_PIN, LOW);
-    } else {
-        // move backward straight - op[1:0] = 00
-        digitalWrite(LEFT_PIN, LOW);
-        digitalWrite(RIGHT_PIN, LOW);
-    }
+    // move left-backward - op[1:0] = 10
+    digitalWrite(LEFT_PIN, HIGH);
+    digitalWrite(RIGHT_PIN, LOW);
+  } else {
+    // move backward straight - op[1:0] = 00
+    digitalWrite(LEFT_PIN, LOW);
+    digitalWrite(RIGHT_PIN, LOW);
+  }
 
-    return ;
+  return ;
 } 

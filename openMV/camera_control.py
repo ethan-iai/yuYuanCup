@@ -6,18 +6,19 @@ class CameraAsSensor(object):
         self.mode = mode
         # 0: standby 1: red_LED 2: green_LED 3: red_home 4: green_home
         self.color = color
-        self.thresholds = [(36, 100, 28, 127, 35, 127),     # red_LED_thresholds
-            (36, 79, -65, -9, -13, 127),                    # green_LED_thresholds
+        self.thresholds = [
+            (59, 100, 12, 127, -7, 33),  #(59, 100, 3, 127, -7, 33),   (64, 94, 10, 127, -7, 40)(36, 100, 28, 127, 35, 127),     # red_LED_thresholds
+            (61, 100, -102, -29, -32, 24),                  #(61, 100, -102, -14, -39, 4)(36, 79, -65, -9, -13, 127) green_LED_thresholds
             (0, 30, 0, 64, -128, 0),                        # blue_LED_thresholds
             (0, 5, 1, 19, -1, 10),                          # red_home_thresholds
             (0, 7, -13, -9, 2, 10)]                         # green_home_thresholds
 
         # pixels_threshold = 3, area_threshold = 6, merge = True, margin = 20
-        self.recognize_conditions = [(3, 6, True, 20),      # red_LED 
+        self.recognize_conditions = [(3, 6, True, 20),      # red_LED
             (3, 6, True, 20),                               # green_LED
             (3, 6, True, 20),                               # blue_LED
             (150, 150, True, False),                        # red_home
-            (150, 150, True, False)]                        # green_home 
+            (150, 150, True, False)]                        # green_home
 
     def init(self, inverse):
         sensor.reset()
