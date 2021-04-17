@@ -31,7 +31,7 @@ void loop() {
   if (angle < -MAX_ANGLE) { angle += MAX_ANGLE; }                            
 
 
-	if ((angle > 5 && angle < 30) || 
+  if ((angle > 5 && angle < 30) || 
       (angle > -175 && angle < -150)) {
     // move right-backward - op[1:0] = 01   
     digitalWrite(RIGHT_PIN, HIGH);
