@@ -32,12 +32,12 @@ void loop() {
 
 
 	if ((angle > 5 && angle < 30) || 
-        (angle > -175 && angle < -150)) {
+      (angle > -175 && angle < -150)) {
     // move right-backward - op[1:0] = 01   
     digitalWrite(RIGHT_PIN, HIGH);
     digitalWrite(LEFT_PIN, LOW);
   } else if ((angle > -30 && angle < -5) || 
-               (angle > 150) && angle < 175) {
+             (angle > 150 && angle < 175)) {
     // move left-backward - op[1:0] = 10
     digitalWrite(LEFT_PIN, HIGH);
     digitalWrite(RIGHT_PIN, LOW);
