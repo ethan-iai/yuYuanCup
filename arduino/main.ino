@@ -56,6 +56,7 @@ void initIO() {
 	pinMode(OP2_PIN, INPUT);
 	
 	pinMode(BACK_PIN, OUTPUT);
+	pinMode(TORCH_PIN, OUTPUT);
 }
 
 void attachInterrupts() {
@@ -197,6 +198,7 @@ bool onTime(void* ) {
 
 bool backHome(void* ) {
 	digitalWrite(BACK_PIN, HIGH);
+	digitalWrite(TORCH_PIN, HIGH)
 	return false;
 }
 

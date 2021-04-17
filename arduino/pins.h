@@ -35,6 +35,7 @@
 
 #define SWITCH_STAGE_PIN (52)
 #define BACK_PIN (50)
+#define TORCH_PIN ()
 
 #define OP1_PIN ()
 #define OP2_PIN ()
