@@ -76,10 +76,7 @@ void set_backward_velocity(int opt) {
     return ;
 }
 
-void set_spin_velocity() {
-    // hint:
-    // modiofy the velocity according to corresponding_angle?
-    
+void set_spin_velocity(int opt=0) {
     speed_on_wheels[0] = speed_on_wheels[3] = -MAX_SPEED;
     speed_on_wheels[1] = speed_on_wheels[2] = MAX_SPEED;
     return;

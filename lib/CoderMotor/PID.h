@@ -30,7 +30,7 @@
 #define RIGHT_BACK (1)
 #define LEFT_BACK (2) 
 
-// FIXME: constants derserted
+// FIXME: constants not referenced
 #define MAX_PIXEL (140)
 
 // speed calculation paremeters
@@ -54,10 +54,11 @@ void set_speed_on_wheels(int decision_coefficient, int direction_coefficient, in
 
 // called in unordered stage
 void set_forward_velocity(int expected_pixel, double distance);
-void set_spin_velocity();
-void set_stop_velocity();
 void set_backward_velocity(int opt);
+void set_spin_velocity(int opt);
+void set_stop_velocity();
 
+// FIXME: functions not referenced 
 // called in ordered stage 
 void set_pan_right_velocity();
 void set_pan_left_velocity();
