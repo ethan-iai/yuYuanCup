@@ -58,20 +58,21 @@ void set_forward_velocity(int expected_pixel, double distance) {
 }
 
 void set_backward_velocity(int opt) {
-    if (opt == LEFT_BACK)// move right-backward    
+    switch (opt) {
+      case LEFT_BACK:
         speed_on_wheels[0] = speed_on_wheels[2] = -MAX_SPEED;
         speed_on_wheels[1] = speed_on_wheels[3] = -0.15 * MAX_SPEED;
-    } else if (opt == RIGHT_BACK) {
-        // move left-backward
-        speed_on_wheels[0] = speed_on_wheels[2] = -MAX_SPEED;
-        speed_on_wheels[1] = speed_on_wheels[3] = -0.15 * MAX_SPEED;    
-    } else {
-        // move backward straight
+        break;
+      case RIGHT_BACK:
+        speed_on_wheels[1] = speed_on_wheels[3] = -MAX_SPEED;
+        speed_on_wheels[0] = speed_on_wheels[2] = -0.15 * MAX_SPEED;
+      default:
+        // move backward straight 
         for (int i = 0; i < 4; i++) {
             speed_on_wheels[i] = -MAX_SPEED;
         }
     }
-
+    
     return ;
 }
 

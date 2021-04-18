@@ -33,9 +33,8 @@
 #define SONAR_TRIG_PIN (13)
 #define SONAR_ECHO_PIN (12)
 
-#define SWITCH_STAGE_PIN (52)
 #define BACK_PIN (50)
-#define TORCH_PIN ()
+#define TORCH_PIN (52)
 
 #define OP1_PIN ()
 #define OP2_PIN ()

@@ -107,6 +107,7 @@ int solve_opt() {
 // initiate the state as SPAWN, is_heading_home as false
 int state = SPAWN;
 bool ordered = true;
+bool back_home = false;
 
 // the initial stage is ordered
 // after 3 min, it switchs to unordered  
@@ -119,6 +120,8 @@ int message = 0;
 
 void loop() {
 	timer.tick();
+
+	if (back_home) { digitalWrite(TORCH_PIN, HIGH); }
 
 	switch (state) {
 	  case FORWARD: {
@@ -197,8 +200,8 @@ bool onTime(void* ) {
 
 
 bool backHome(void* ) {
+	back_home = true;
 	digitalWrite(BACK_PIN, HIGH);
-	digitalWrite(TORCH_PIN, HIGH)
 	return false;
 }
 
