@@ -104,12 +104,11 @@ int solve_opt() {
 	return ((op1 << 1) | op0);
 }
 
-// initiate the state as SPAWN, is_heading_home as false
+// initiate the state as SPAWN
 int state = SPAWN;
 bool ordered = true;
 bool back_home = false;
 
-// the initial stage is ordered
 // after 3 min, it switchs to unordered  
 volatile double distance = 0.0;
 
@@ -117,6 +116,8 @@ volatile double distance = 0.0;
 // messgae expresses the delta pixel in unordered stage
 int message = 0;
 
+// spin optcode 
+int spin_opt = 0;
 
 void loop() {
 	timer.tick();
@@ -141,6 +142,7 @@ void loop() {
 		if (millis() - start_time > BACKWARD_PERIOD || distance > MAX_BACKWARD_DISTANCE) { 
 			// being backward for backward_period or moving farther than MAX_BACKWARD_DISTANCE
 			// switch state to SPIN
+			spin_op = solve_opt();
 			state = SPIN; 	
 		}
 		break;
@@ -173,7 +175,7 @@ void setVelocity() {
 	  case BACKWARD:
 		set_backward_velocity(solve_opt()); break;
 	  case SPIN:
-		set_spin_velocity(); break; 
+		set_spin_velocity(spin_opt); break; 
 	  case SPAWN:
 		set_forward_velocity(0, distance); break;
 	  default: {
