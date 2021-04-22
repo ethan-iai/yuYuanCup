@@ -33,11 +33,12 @@
 #define SONAR_TRIG_PIN (13)
 #define SONAR_ECHO_PIN (12)
 
-#define BACK_PIN (50)
+#define BACK_PIN (50)  
+
 #define TORCH_PIN (52)
 
-#define OP1_PIN ()
-#define OP2_PIN ()
+#define OP1_PIN (44)
+#define OP0_PIN (46)
 #define DELTA_PIX_PIN (A0)
 
 #endif

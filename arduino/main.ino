@@ -42,8 +42,6 @@ void right_back_negative() { negative(CODER_A_RIGHT_BACK, &right_back_count); };
 
 
 void initIO() {
-	// Serial.begin(9600);
-
 	// apply power to the coders
 	digitalWrite(CODER_VCC_LEFT_FRONT, HIGH);
 	digitalWrite(CODER_VCC_RIGHT_FRONT, HIGH);
@@ -53,7 +51,7 @@ void initIO() {
 	// claim the messgae transmission pin
 	pinMode(DELTA_PIX_PIN, INPUT);
 	pinMode(OP1_PIN, INPUT);
-	pinMode(OP2_PIN, INPUT);
+	pinMode(OP0_PIN, INPUT);
 	
 	pinMode(BACK_PIN, OUTPUT);
 	pinMode(TORCH_PIN, OUTPUT);
@@ -76,6 +74,8 @@ void attachInterrupts() {
 
 unsigned long start_time = 0;
 void setup() {
+//  Serial.begin(9600);
+
 	initIO();
 	attachInterrupts(); 
 
@@ -100,7 +100,7 @@ void setup() {
 int read_delta_pixel() { return analogRead(DELTA_PIX_PIN) / 2 - 146; }
 int solve_opt() { 
 	int op1 = digitalRead(OP1_PIN);
-	int op0 = digitalRead(OP2_PIN);
+	int op0 = digitalRead(OP0_PIN);
 	return ((op1 << 1) | op0);
 }
 
@@ -129,7 +129,7 @@ void loop() {
 		message = read_delta_pixel();
 		if (message > OUT_OF_SIGHT || message < -OUT_OF_SIGHT) {
 			// if lights off
-			state = BACKWARD;
+      state = BACKWARD;
 			start_time = millis();
 		}
 		break;
@@ -142,7 +142,7 @@ void loop() {
 		if (millis() - start_time > BACKWARD_PERIOD || distance > MAX_BACKWARD_DISTANCE) { 
 			// being backward for backward_period or moving farther than MAX_BACKWARD_DISTANCE
 			// switch state to SPIN
-			spin_op = solve_opt();
+			spin_opt = solve_opt();
 			state = SPIN; 	
 		}
 		break;
@@ -173,7 +173,7 @@ void setVelocity() {
 	  case FORWARD:
 		set_forward_velocity(read_delta_pixel(), distance); break;
 	  case BACKWARD:
-		set_backward_velocity(solve_opt()); break;
+    set_backward_velocity(solve_opt()); break;
 	  case SPIN:
 		set_spin_velocity(spin_opt); break; 
 	  case SPAWN:
