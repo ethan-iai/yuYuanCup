@@ -13,7 +13,7 @@ GREEN_HOME = 4
 
 # settings before match or test: (double check before match!)
 INVERSE = True      # is the camera inverse or not
-TESTING = True      # if true then you can control which mode OpenMv is in (to set CAMERA_MODE and CONTROL_MODE)
+TESTING = False      # if true then you can control which mode OpenMv is in (to set CAMERA_MODE and CONTROL_MODE)
 COLOR = RED         # the color to recognize (RED or GREEN)
 TITLE_ANGLE = 24     # the angle of the title servo (-90 to 90)
 
@@ -45,17 +45,20 @@ while(True):
     clock.tick()
     img = camera.photo_taking()
     count = rtc.datetime()[6]       # number of second
-    
+
     # read the value of returning pin:
     value_of_returning = returning_pin.value()
     if value_of_returning == 1 and camera.mode < 3:
         camera.mode += 2
         pid.clear()
+    elif value_of_returning == 0 and camera.mode > 2:
+        camera.mode -= 2
+        pid.clear()
 
     center_of_target = camera.recognition(img)
     delta_pixel = 0
 
-    
+
     if center_of_target >= 0:
         delta_pixel = (-center_of_target + 160) * INVERSE
         expected_pixel = pid.get_expected_pixel(delta_pixel)
