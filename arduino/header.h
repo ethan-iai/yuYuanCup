@@ -10,6 +10,7 @@
 #include <PID.h>
 
 #define INTERVAL_MILLIS (25)
+#define PARAM_UPDATE_INTERVAL_MILLIS (25)
 
 #ifdef DBG
   #define BACK_TIME_MILLIS (60000)
@@ -18,12 +19,12 @@
   #define NDEBUG
 #endif
 
-#define SPAWN_PERIOD (2500)
+#define SPAWN_PERIOD (2000)
 
 #define FORWARD_PIXEL (90)
 #define OUT_OF_SIGHT (140)
 
-#define BACKWARD_PERIOD (700) 
+#define BACKWARD_PERIOD (800) 
 #define MAX_BACKWARD_DISTANCE (80)
 
 #define SPAWN (0)
@@ -31,6 +32,7 @@
 #define BACKWARD (2)
 #define SPIN (3)
 
+static const int BACKWARD_PERIODS[] = {700, 900, 900};
 
 extern int speed_on_wheels[4];
 

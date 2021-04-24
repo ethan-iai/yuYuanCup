@@ -89,7 +89,7 @@ void setup() {
 	timer.in(BACK_TIME_MILLIS, backHome);
 	
 	// set the timer to measure the distance of front obstacle
-	timer.every(INTERVAL_MILLIS, getDistance);
+	timer.every(PARAM_UPDATE_INTERVAL_MILLIS, updateParams);
 
 	// init the start_time 
 	start_time = millis();
@@ -99,9 +99,9 @@ void setup() {
 // test the range of return value: in [-150, 150]
 int read_delta_pixel() { return analogRead(DELTA_PIX_PIN) / 2 - 146; }
 int solve_opt() { 
-	int op1 = digitalRead(OP1_PIN);
-	int op0 = digitalRead(OP0_PIN);
-	return ((op1 << 1) | op0);
+  int op1 = digitalRead(OP1_PIN);
+  int op0 = digitalRead(OP0_PIN);
+  return ((op1 << 1) | op0);
 }
 
 // initiate the state as SPAWN
@@ -116,9 +116,6 @@ volatile double distance = 0.0;
 // messgae expresses the delta pixel in unordered stage
 int message = 0;
 
-// spin optcode 
-int spin_opt = 0;
-
 void loop() {
 	timer.tick();
 
@@ -129,7 +126,7 @@ void loop() {
 		message = read_delta_pixel();
 		if (message > OUT_OF_SIGHT || message < -OUT_OF_SIGHT) {
 			// if lights off
-      state = BACKWARD;
+			state = BACKWARD;
 			start_time = millis();
 		}
 		break;
@@ -139,10 +136,10 @@ void loop() {
 			TODO: adjust MAx_BACKWARD_DISTANCE
 			if so, swith the order of 2 judgements in line 144
 		*/		 
-		if (millis() - start_time > BACKWARD_PERIOD || distance > MAX_BACKWARD_DISTANCE) { 
+      if (millis() - start_time > BACKWARD_PERIODS[0] || distance > MAX_BACKWARD_DISTANCE) { 
 			// being backward for backward_period or moving farther than MAX_BACKWARD_DISTANCE
 			// switch state to SPIN
-			spin_opt = solve_opt();
+//			spin_opt = solve_opt();
 			state = SPIN; 	
 		}
 		break;
@@ -152,9 +149,10 @@ void loop() {
 		if (message < FORWARD_PIXEL && message > -FORWARD_PIXEL) { state = FORWARD; }
 		break;
 	  }
-	  case SPAWN:
+	  case SPAWN: {
 		if (millis() - start_time > SPAWN_PERIOD) { state = SPIN; } 
 		break;
+	  }
 	  default: { 
 		// case STOP:
 		message = read_delta_pixel(); // message is either OUT_OF_SIGHT or the delta pixel
@@ -175,7 +173,7 @@ void setVelocity() {
 	  case BACKWARD:
     set_backward_velocity(solve_opt()); break;
 	  case SPIN:
-		set_spin_velocity(spin_opt); break; 
+		set_spin_velocity(0); break; 
 	  case SPAWN:
 		set_forward_velocity(0, distance); break;
 	  default: {
@@ -216,8 +214,7 @@ bool switchStage(void* ) {
 	return false;
 } 
 
-
-bool getDistance(void* ) {
+bool updateParams(void* ) {
 	distance = sonar.distanceCM();
-	return true;
+  return true;
 }
