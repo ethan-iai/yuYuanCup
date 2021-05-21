@@ -101,33 +101,3 @@ void set_stop_velocity() {
     return ;
 }
 
-// FIXME: function deserted 
-void set_pan_right_velocity() {
-    speed_on_wheels[0] = speed_on_wheels[2] = MAX_SPEED;
-    speed_on_wheels[1] = speed_on_wheels[3] = -MAX_SPEED;
-}
-
-// FIXME: function deserted
-void set_pan_left_velocity() {
-    speed_on_wheels[0] = speed_on_wheels[2] = -MAX_SPEED;
-    speed_on_wheels[1] = speed_on_wheels[3] = MAX_SPEED;
-}
-
-// FIXME: function deserted
-void set_collecting_velocity(int angle) {
-    if (angle < -MAX_PIXEL || angle > MAX_PIXEL) { 
-        for (int i = 0; i < 4; i++) {
-            speed_on_wheels[i] = MIN_SPEED;
-        }
-        return ; 
-    }
-    if (angle > 0) {
-        for (int i = 0; i < 4; i++) {
-            speed_on_wheels[i] = MAX_SPEED; 
-        }
-    } else {
-        for (int i = 0; i < 4; i++) {
-            speed_on_wheels[i] = -MAX_SPEED;
-        }
-    }
-}

@@ -14,7 +14,7 @@
 // -------------------------------------------------------
 #define MAX_PWM (255)
 #define MID_PWM (125)
-#define MIN_PWM (20)
+#define MIN_PWM (50)
 
 #define MAX_SPEED (100)
 #define MID_SPEED (40) //checked
@@ -30,11 +30,9 @@
 #define RIGHT_BACK (1)
 #define LEFT_BACK (2) 
 
-// FIXME: constants not referenced
-#define MAX_PIXEL (140)
 
 // speed calculation paremeters
-static const float corresponding_angle = 0.55; // modified
+static const float corresponding_angle = 0.70; 
 
 // PID const parameters
 static const float kp_motor = 33;
@@ -57,11 +55,5 @@ void set_forward_velocity(int expected_pixel, double distance);
 void set_backward_velocity(int opt);
 void set_spin_velocity(int opt);
 void set_stop_velocity();
-
-// FIXME: functions not referenced 
-// called in ordered stage 
-void set_pan_right_velocity();
-void set_pan_left_velocity();
-void set_collecting_velocity(int angle);
 
 #endif
