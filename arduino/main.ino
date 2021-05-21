@@ -106,6 +106,7 @@ int solve_opt() {
 
 // initiate the state as SPAWN
 int state = SPAWN;
+int backward_periods_idx = 0;
 bool ordered = true;
 bool back_home = false;
 
@@ -132,14 +133,9 @@ void loop() {
 		break;
 	  }
 	  case BACKWARD: {
-		/* TODO: test the whether the distance measurement if corret
-			TODO: adjust MAx_BACKWARD_DISTANCE
-			if so, swith the order of 2 judgements in line 144
-		*/		 
-      if (millis() - start_time > BACKWARD_PERIODS[0] || distance > MAX_BACKWARD_DISTANCE) { 
+		if (millis() - start_time > BACKWARD_PERIODS[backward_periods_idx] || distance > MAX_BACKWARD_DISTANCE) { 
 			// being backward for backward_period or moving farther than MAX_BACKWARD_DISTANCE
 			// switch state to SPIN
-//			spin_opt = solve_opt();
 			state = SPIN; 	
 		}
 		break;
@@ -211,6 +207,7 @@ bool switchStage(void* ) {
 	// assuming the state of car is COLLECTING
 	// switch the state the RESET
 	ordered = false;
+	backward_periods_idx = 1;
 	return false;
 } 
 

@@ -32,7 +32,7 @@
 #define BACKWARD (2)
 #define SPIN (3)
 
-static const int BACKWARD_PERIODS[] = {700, 900, 900};
+static const int BACKWARD_PERIODS[] = {1000, 700, 700};
 
 extern int speed_on_wheels[4];
 
