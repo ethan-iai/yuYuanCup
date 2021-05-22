@@ -11,6 +11,9 @@ Yuyuan Cup is a game to build self-conrtolled car to finish given tasks to reach
 - we apply openMV packed color-detection algorithm to track the light with given color.
 - the coder&motor-control and PID algorithm for motors are packed in `lib/CoderMotor`  
 
+## tips 
+If you want to get the CoderMotor lib only, just pull branch lib/CoderMotor.
+
 ## Appendix：
 [比赛规则](https://bhpan.buaa.edu.cn/#/link/7E5CFF6D305448837059D5E1C2D75403)
     
