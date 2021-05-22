@@ -1,2 +1,0 @@
-Sonar	KEYWORD1
-distanceCM	KEYWORD2

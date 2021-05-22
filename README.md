@@ -1,16 +1,27 @@
-# YuyuanCup
+# CoderMotor 
 
-## Introdution
-Yuyuan Cup is a game to build self-conrtolled car to finish given tasks to reach the highest score, which are hosted by BUAA ASEE. In Yuyuan Cup 2020~2021, the self driving cars were asked to 
-- touch the light house with given color
-- hit the adverarial car's back traking light
-- going back starting spot when the game is over
+## features
+- lib for motor with encoder  
+- simple algorithm inside (can be overrided)
 
-## Structure 
-- The contolling logic of car are implmented in `arduino/` with arduino DUE. 
-- we apply openMV packed color-detection algorithm to track the light with given color.
-- the coder&motor-control and PID algorithm for motors are packed in `lib/CoderMotor`  
+## API
+```cpp
+/**
+ * declare a CoderMotor in arduino program
+ */ 
+volatile long count = 0;    // definate encoder increment varaible 
+CoderMotor(PWM_PIN, FORWARD_PIN, BACKWARD_PIN, CODER_VCC_PIN, 
+           CODER_POSITIVE_PIN, CODER_NEGATIVE_PIN, &count) aCoderMotor;
 
-## Appendix：
-[比赛规则](https://bhpan.buaa.edu.cn/#/link/7E5CFF6D305448837059D5E1C2D75403)
+/**
+ * control the motor to run at given velocity 
+ * scale from [0, 100] (with mapping to pwm {0, 255})
+ * this function will call a pid algorithm to control 
+ * the velocity precisly 
+*/
+aCoder.run(EXPECTITED_VELOCITY);
+```
+### advanced 
+To let the lib to fit different encoder-motors, you can modify the parameters in `PID.h` . 
+```  
     
