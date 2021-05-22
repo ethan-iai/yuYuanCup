@@ -20,9 +20,9 @@ private:
 	Coder coder_; //  coder of the motor 
 	PIDController PIDController_;
 
-	void motorForward(int pwm) { do { digitalWrite(forward_pin_, HIGH); digitalWrite(backward_pin_, LOW); analogWrite(PWM_pin_, pwm);} while (false); }; 
-	void motorStop(int pwm) { do { digitalWrite(forward_pin_, LOW); digitalWrite(backward_pin_, LOW); analogWrite(PWM_pin_, pwm);} while (false); }; 
-	void motorBackward(int pwm) { do { digitalWrite(forward_pin_, LOW); digitalWrite(backward_pin_, HIGH); analogWrite(PWM_pin_, pwm);} while (false); }; 
+	void motorForward(int pwm) { digitalWrite(forward_pin_, HIGH); digitalWrite(backward_pin_, LOW); analogWrite(PWM_pin_, pwm); };
+	void motorStop(int pwm) { digitalWrite(forward_pin_, LOW); digitalWrite(backward_pin_, LOW); analogWrite(PWM_pin_, pwm); }; 
+	void motorBackward(int pwm) { digitalWrite(forward_pin_, LOW); digitalWrite(backward_pin_, HIGH); analogWrite(PWM_pin_, pwm); }; 
 
 public:
 	CoderMotor(int PWM_pin, int forward_pin, int backward_pin_, int coder_VCC_pin, 

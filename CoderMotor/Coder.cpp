@@ -26,5 +26,5 @@ double Coder::getCurrentVelocity() {
     double current_velocity = VELOCITY_SCALE_VALUE * (double)(*pulse_count_ptr_) / delta_time_millis;
 
     *pulse_count_ptr_ = 0;
-	time_last_millis_ = millis();
+    time_last_millis_ = millis();
 }
